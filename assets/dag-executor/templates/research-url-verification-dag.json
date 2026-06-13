@@ -1,0 +1,41 @@
+{
+  "dagId": "research-url-verification",
+  "tasks": {
+    "source_a": {
+      "type": "evidence",
+      "runner": "url_fetch_hash",
+      "source_url": "https://hermes.pyth.network/docs/",
+      "input_key": "source_a",
+      "depends_on": [],
+      "output_key": "source_a"
+    },
+    "source_b": {
+      "type": "evidence",
+      "runner": "url_fetch_hash",
+      "source_url": "https://docs.pyth.network/",
+      "input_key": "source_b",
+      "depends_on": [],
+      "output_key": "source_b"
+    },
+    "source_c": {
+      "type": "evidence",
+      "runner": "url_fetch_hash",
+      "source_url": "https://developers.binance.com/docs/binance-spot-api-docs/rest-api",
+      "input_key": "source_c",
+      "depends_on": [],
+      "output_key": "source_c"
+    },
+    "source_consensus": {
+      "type": "compute",
+      "runner": "aggregate",
+      "depends_on": ["source_a", "source_b", "source_c"],
+      "output_key": "consensus"
+    },
+    "record_result": {
+      "type": "contract_call",
+      "runner": "simulated",
+      "depends_on": ["source_consensus"],
+      "output_key": "result"
+    }
+  }
+}

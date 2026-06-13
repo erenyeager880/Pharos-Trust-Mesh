@@ -1,0 +1,82 @@
+{
+  "network": "local",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "dagId": "defi-market-signal",
+  "source": "E:\\pharos2\\pharos-skill-engine-0.1.0\\assets\\dag-executor\\generated\\defi-market-signal.json",
+  "dagHash": "0xda5114837971cbc8d71fdb3016905f5da1a8ce8ea3a015a7bd3fc9d71f4d4076",
+  "layerHashes": [
+    "0x2134e6ad405340e378499b1e0e0a2f7a10f29c16a78f55e7151feeb26d94041f",
+    "0x5835cbea623f6c1e5d29162789932fbafabf5f6c9bf4792eba2a1c667f93b508",
+    "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
+  ],
+  "layer0Hash": "0x2134e6ad405340e378499b1e0e0a2f7a10f29c16a78f55e7151feeb26d94041f",
+  "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 3,
+    "layer0BatchMs": 515
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "liquidity",
+          "startedAt": 1781301655785,
+          "finishedAt": 1781301656179,
+          "durationMs": 394,
+          "runner": "http_json"
+        },
+        {
+          "taskId": "btc_price",
+          "startedAt": 1781301655714,
+          "finishedAt": 1781301656181,
+          "durationMs": 467,
+          "runner": "pyth_price"
+        },
+        {
+          "taskId": "funding_rate",
+          "startedAt": 1781301655784,
+          "finishedAt": 1781301656228,
+          "durationMs": 444,
+          "runner": "http_json"
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 515
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "trade_signal",
+          "startedAt": 1781301656229,
+          "finishedAt": 1781301656229,
+          "durationMs": 0,
+          "runner": "compute_signal"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "record_result",
+          "startedAt": 1781301656229,
+          "finishedAt": 1781301656233,
+          "durationMs": 4,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "executionId": "0x96cc8a6dccaafcd8f70b8fa3ef7ffd48c5d8d412858930354e89cf5d3b244b8d",
+  "registerTx": "0x044df1ed9007a9542fb5f14e5bce2de88524e75ce33d616b3009033b5145ffd0",
+  "finalizeTx": "0xdbde68ddbf5bc3910f2f5fdd5fc9958945ff2da171cdb8d38d741d37dcd03c31",
+  "getExecution": "(0xda5114837971cbc8d71fdb3016905f5da1a8ce8ea3a015a7bd3fc9d71f4d4076, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+}

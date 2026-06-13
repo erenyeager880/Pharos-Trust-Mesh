@@ -1,0 +1,45 @@
+{
+  "version": 3,
+  "notes": "Shipped workflows use real Pyth, HTTP JSON, URL fetch, or on-chain balance evidence. Custom DAGs may use any runner in task-runners.js via --dag path.",
+  "workflows": [
+    {
+      "dagId": "payment",
+      "name": "Payment Verification DAG",
+      "description": "Parallel PHRS balance + Pyth ETH/USD price checks before result record",
+      "file": "canonical/payment-dag.json",
+      "dagHash": "0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91"
+    },
+    {
+      "dagId": "oracle-validation",
+      "name": "Oracle Validation Network",
+      "description": "N independent Pyth fetches → consensus check",
+      "file": "templates/oracle-validation-dag.json",
+      "template": true,
+      "dagHash": "0xde92199d83877cb747b5a3b59b17494f7d0efa2b223a5159250936ad1642d9ce"
+    },
+    {
+      "dagId": "defi-market-signal",
+      "name": "DeFi Market Signal",
+      "description": "Pyth BTC/USD + Binance funding/order-book JSON → market signal",
+      "file": "templates/defi-market-signal-dag.json",
+      "template": true,
+      "dagHash": "0xda5114837971cbc8d71fdb3016905f5da1a8ce8ea3a015a7bd3fc9d71f4d4076"
+    },
+    {
+      "dagId": "wallet-risk-snapshot",
+      "name": "Wallet Risk Snapshot",
+      "description": "Real PHRS native balance snapshot → evidence record",
+      "file": "templates/wallet-risk-snapshot-dag.json",
+      "template": true,
+      "dagHash": "0x5157a4a56821839d6010db86f034d94e6fe0a746db6c96079afdf362d7f7950b"
+    },
+    {
+      "dagId": "research-url-verification",
+      "name": "Research URL Verification",
+      "description": "Multiple real URL fetches → content hash consensus",
+      "file": "templates/research-url-verification-dag.json",
+      "template": true,
+      "dagHash": "0x405c3f2bbf01a817dd2c6c20328edb3bb2687c2f25eed188ddbe9c2c25c6dcfd"
+    }
+  ]
+}

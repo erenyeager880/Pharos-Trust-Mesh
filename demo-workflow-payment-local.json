@@ -1,0 +1,81 @@
+{
+  "network": "local",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "dagId": "payment",
+  "source": "catalog:payment",
+  "dagHash": "0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91",
+  "layerHashes": [
+    "0x64c02d86915c2ce5e57158a25f7fb03940add679f454a909d623c1e5caa27cf5",
+    "0xdeb4fb7a7d1934ee0cbb9f44075e6a0d2accd5d643060f4c98c80f3c305fde85",
+    "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
+  ],
+  "layer0Hash": "0x64c02d86915c2ce5e57158a25f7fb03940add679f454a909d623c1e5caa27cf5",
+  "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 2,
+    "layer0BatchMs": 469
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "check_wallet_balance",
+          "startedAt": 1781302391558,
+          "finishedAt": 1781302391596,
+          "durationMs": 38,
+          "runner": "native_balance"
+        },
+        {
+          "taskId": "check_eth_usd_price",
+          "startedAt": 1781302391489,
+          "finishedAt": 1781302391958,
+          "durationMs": 469,
+          "runner": "pyth_price"
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 469
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "validate_transfer",
+          "startedAt": 1781302391958,
+          "finishedAt": 1781302391958,
+          "durationMs": 0,
+          "runner": "aggregate"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "record_result",
+          "startedAt": 1781302391958,
+          "finishedAt": 1781302391962,
+          "durationMs": 4,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "verifierAddresses": {
+    "verifierB": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "verifierC": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+  },
+  "verifierKeyMode": "local-mnemonic",
+  "executionId": "0xe1669a1010007cd4f499625779b03923ddc40144e391afcb42345fc6cae5c2c2",
+  "registerTx": "0x01c8c2d95eea453a4277a5651fa2b223c58037e68a40a5f6d5a360a18d2317c1",
+  "finalizeTx": "0x2af1a257929d34f1be1d97cca4355b845d4e96cf91929923f0c08fc9c5b2418a",
+  "getExecution": "(0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+}

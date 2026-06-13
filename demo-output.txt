@@ -1,0 +1,51 @@
+# Pharos TrustMesh — Demo Transcript
+
+## 1. Shipped workflows (real evidence)
+
+| dagId | Layer 0 evidence |
+|-------|------------------|
+| payment | PHRS balance + Pyth ETH/USD (parallel) |
+| oracle-validation | 3× Pyth price fetches (parallel) |
+| defi-market-signal | Pyth BTC/USD + Binance funding + book ticker |
+| wallet-risk-snapshot | PHRS native balance |
+| research-url-verification | 3× real URL content hashes (parallel) |
+
+## 2. Payment (refactored, no mock KYC)
+
+```
+Layer 0: check_wallet_balance + check_eth_usd_price (2 parallel, real data)
+Layers: 3 (validate → record)
+npm run demo:local → verify-execution demo-workflow-payment-local.json: PASS
+```
+
+## 3. Oracle validation
+
+```
+npm run workflow -- --template oracle-validation --oracle BTC/USD --network local
+Layer 0: parallel (3 Pyth fetches)
+verify-execution: PASS
+```
+
+## 4. Real-data templates
+
+```
+npm run workflow -- --template defi-market-signal --network local
+npm run workflow -- --template wallet-risk-snapshot --network local
+npm run workflow -- --template research-url-verification --network local
+```
+
+## 5. Compose quick check
+
+```
+npm run compose-dag -- --oracle BTC/USD --balance
+npm run workflow -- --dag assets/dag-executor/generated/custom.json --network local
+```
+
+## Commands
+
+```bash
+npm run demo:local
+npm run workflow -- --template oracle-validation --oracle BTC/USD --network local
+npm run workflow -- --template defi-market-signal --network local
+npm run verify-execution demo-workflow-payment-local.json
+```

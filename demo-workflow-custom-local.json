@@ -1,0 +1,75 @@
+{
+  "network": "local",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "dagId": "custom",
+  "source": "E:\\pharos2\\pharos-skill-engine-0.1.0\\assets\\dag-executor\\generated\\custom.json",
+  "dagHash": "0x0f68e72b475c7047fb661c9c75f5796955bf56914ebefdcdfe4056e9bcc0a0b8",
+  "layerHashes": [
+    "0xfa1dc42c239a962778be28aeae2dc91839fae83418a797952169d541cc4d5434",
+    "0x28816e60a4bd9be732481c1206fea636045d23e0826f125201f5760cc8981cfa",
+    "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
+  ],
+  "layer0Hash": "0xfa1dc42c239a962778be28aeae2dc91839fae83418a797952169d541cc4d5434",
+  "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 2,
+    "layer0BatchMs": 472
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "check_wallet_balance",
+          "startedAt": 1781301666507,
+          "finishedAt": 1781301666589,
+          "durationMs": 82,
+          "runner": "native_balance"
+        },
+        {
+          "taskId": "oracle_btc_usd",
+          "startedAt": 1781301666509,
+          "finishedAt": 1781301666979,
+          "durationMs": 470,
+          "runner": "pyth_price"
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 472
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "aggregate_checks",
+          "startedAt": 1781301666979,
+          "finishedAt": 1781301666979,
+          "durationMs": 0,
+          "runner": "aggregate"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "record_result",
+          "startedAt": 1781301666979,
+          "finishedAt": 1781301666982,
+          "durationMs": 3,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "executionId": "0x4861f05ed18b64364640444477248899d3a822b4c9dadee48004d44097fd119b",
+  "registerTx": "0xc7fe313086bbf5276cdc8d18a9c01e411e368c57a1ebd7501a3bf7958591bb77",
+  "finalizeTx": "0x1871a3cb1c8a3dd7a4746626607cb2a247c799230e1ea3b5bb7c8f0724118c64",
+  "getExecution": "(0x0f68e72b475c7047fb661c9c75f5796955bf56914ebefdcdfe4056e9bcc0a0b8, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+}

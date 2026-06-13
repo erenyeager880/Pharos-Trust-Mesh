@@ -1,0 +1,6 @@
+.env
+cache/
+out/
+broadcast/
+node_modules/
+lib/forge-std/

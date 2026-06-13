@@ -1,0 +1,23 @@
+{
+  "dagId": "wallet-risk-snapshot",
+  "tasks": {
+    "phrs_balance": {
+      "type": "read",
+      "runner": "native_balance",
+      "depends_on": [],
+      "output_key": "phrs_balance"
+    },
+    "snapshot": {
+      "type": "compute",
+      "runner": "aggregate",
+      "depends_on": ["phrs_balance"],
+      "output_key": "snapshot"
+    },
+    "record_result": {
+      "type": "contract_call",
+      "runner": "simulated",
+      "depends_on": ["snapshot"],
+      "output_key": "result"
+    }
+  }
+}

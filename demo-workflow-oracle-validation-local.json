@@ -1,0 +1,82 @@
+{
+  "network": "local",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "dagId": "oracle-validation",
+  "source": "E:\\pharos2\\pharos-skill-engine-0.1.0\\assets\\dag-executor\\generated\\oracle-validation.json",
+  "dagHash": "0x4c7f7c8a63355a37eaec582299034627d4c0849322af3f09562d916de64ce6e1",
+  "layerHashes": [
+    "0x48f661b849ee0dc9034ec66fee6cd75bee31c09f89a8a377f7f6000e6d9ca903",
+    "0xddb00badf7eb4515d958ef3e5d7f2091f6e144c75f0c58e9425b1b1df2566a4b",
+    "0xbbd43b85279bdd54ec947d6d6a5397357a74887208bde8e446e01430d3c70539"
+  ],
+  "layer0Hash": "0x48f661b849ee0dc9034ec66fee6cd75bee31c09f89a8a377f7f6000e6d9ca903",
+  "resultHash": "0xef49a030ee35299c74b18ab36a79fac6fed3fd71d788a1f200bde2d52c459fac",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 3,
+    "layer0BatchMs": 422
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "fetch_agent_a",
+          "startedAt": 1781301651687,
+          "finishedAt": 1781301652105,
+          "durationMs": 418,
+          "runner": "pyth_price"
+        },
+        {
+          "taskId": "fetch_agent_c",
+          "startedAt": 1781301651747,
+          "finishedAt": 1781301652106,
+          "durationMs": 359,
+          "runner": "pyth_price"
+        },
+        {
+          "taskId": "fetch_agent_b",
+          "startedAt": 1781301651746,
+          "finishedAt": 1781301652109,
+          "durationMs": 363,
+          "runner": "pyth_price"
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 422
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "consensus_check",
+          "startedAt": 1781301652109,
+          "finishedAt": 1781301652109,
+          "durationMs": 0,
+          "runner": "consensus_check"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "record_consensus",
+          "startedAt": 1781301652109,
+          "finishedAt": 1781301652113,
+          "durationMs": 4,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "executionId": "0xb87f9fd367b020aae27c4c9809663a3d646c8b721ce69c6ccc3eab331f1373c6",
+  "registerTx": "0x6d0dba42ec524984c23cc5333b0f3b650b01fa434a16f7286546ed65201b4e07",
+  "finalizeTx": "0x4391124a72145e74a8663139e8c936a98fad6b8c126ce35de576a536896ef640",
+  "getExecution": "(0x4c7f7c8a63355a37eaec582299034627d4c0849322af3f09562d916de64ce6e1, 0xef49a030ee35299c74b18ab36a79fac6fed3fd71d788a1f200bde2d52c459fac, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+}

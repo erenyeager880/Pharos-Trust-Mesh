@@ -1,0 +1,82 @@
+{
+  "network": "local",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "dagId": "research-url-verification",
+  "source": "E:\\pharos2\\pharos-skill-engine-0.1.0\\assets\\dag-executor\\generated\\research-url-verification.json",
+  "dagHash": "0x405c3f2bbf01a817dd2c6c20328edb3bb2687c2f25eed188ddbe9c2c25c6dcfd",
+  "layerHashes": [
+    "0xc98deb9f81efda812c556ce7730a2e9b8367d802e0ca3ade617505b24161f72d",
+    "0xf7ad9027e41c3f37511e3c53642a140d36e796e2ae89d899bdb032fb451f901a",
+    "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
+  ],
+  "layer0Hash": "0xc98deb9f81efda812c556ce7730a2e9b8367d802e0ca3ade617505b24161f72d",
+  "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 3,
+    "layer0BatchMs": 1334
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "source_a",
+          "startedAt": 1781301661993,
+          "finishedAt": 1781301662408,
+          "durationMs": 415,
+          "runner": "url_fetch_hash"
+        },
+        {
+          "taskId": "source_c",
+          "startedAt": 1781301662054,
+          "finishedAt": 1781301662740,
+          "durationMs": 686,
+          "runner": "url_fetch_hash"
+        },
+        {
+          "taskId": "source_b",
+          "startedAt": 1781301662052,
+          "finishedAt": 1781301663326,
+          "durationMs": 1274,
+          "runner": "url_fetch_hash"
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 1334
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "source_consensus",
+          "startedAt": 1781301663326,
+          "finishedAt": 1781301663326,
+          "durationMs": 0,
+          "runner": "aggregate"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "record_result",
+          "startedAt": 1781301663326,
+          "finishedAt": 1781301663328,
+          "durationMs": 2,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "executionId": "0x8246a9f95c05e502df23d2d3fdd944c4b67e4879ec8534af8481db3d77f80897",
+  "registerTx": "0x32cc00f21c25cb4b84a5979fdbebf5d61308a0de9aecf602628bb8b1e256e9ed",
+  "finalizeTx": "0xc5372cc9ba708fbbb775661769ead49e63069d3a9652e0448bbf50562646d3a8",
+  "getExecution": "(0x405c3f2bbf01a817dd2c6c20328edb3bb2687c2f25eed188ddbe9c2c25c6dcfd, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+}

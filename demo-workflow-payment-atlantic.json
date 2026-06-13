@@ -1,0 +1,95 @@
+{
+  "network": "atlantic",
+  "rpcUrl": "https://atlantic.dplabs-internal.com",
+  "dagId": "payment",
+  "source": "catalog:payment",
+  "dagHash": "0x362834bcdf2aa8d653c5691e9269d2d2d018827517233715b8c0a64c274315ec",
+  "layerHashes": [
+    "0xff2f9c88557548692da6d93c193790e0193e47a7a154bb10024a17c1b3e5a2b7",
+    "0xdfba72e5791a20b2a2d9e3ebe5eceface12ed3fba708d7ca71fbce6c11fa5341",
+    "0x1e416876d9fe81316fc0fe7514f6abce9b622840a12533aef49a0d409930181f",
+    "0x3ea45b96ea86588e854d806cde555b17ecdf1792bb3bdc5c354cb7af2fd6548a"
+  ],
+  "layer0Hash": "0xff2f9c88557548692da6d93c193790e0193e47a7a154bb10024a17c1b3e5a2b7",
+  "resultHash": "0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 3,
+    "layer0BatchMs": 969
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "check_recipient_kyc",
+          "startedAt": 1781299920514,
+          "finishedAt": 1781299920523,
+          "durationMs": 9,
+          "runner": "kyc_flag"
+        },
+        {
+          "taskId": "check_eth_usd_price",
+          "startedAt": 1781299920237,
+          "finishedAt": 1781299921065,
+          "durationMs": 828,
+          "runner": "pyth_price"
+        },
+        {
+          "taskId": "check_wallet_balance",
+          "startedAt": 1781299920515,
+          "finishedAt": 1781299921205,
+          "durationMs": 690,
+          "runner": "native_balance"
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 969
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "validate_transfer",
+          "startedAt": 1781299921205,
+          "finishedAt": 1781299921205,
+          "durationMs": 0,
+          "runner": "aggregate"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "execute_payment",
+          "startedAt": 1781299921205,
+          "finishedAt": 1781299921221,
+          "durationMs": 16,
+          "runner": "simulated"
+        }
+      ]
+    },
+    {
+      "layerIndex": 3,
+      "timings": [
+        {
+          "taskId": "post_receipt",
+          "startedAt": 1781299921221,
+          "finishedAt": 1781299921225,
+          "durationMs": 4,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "executionId": "0x6e12bbb698e17990f8ab2722c9758a6057001a11819129e7c4243ebf71c83174",
+  "registerTx": "0x5a6c80c086be5116e809c13d93fbfd41f5005238ad1cd9642f4b9caf52214ca7",
+  "finalizeTx": "0xa09fbf1342717c359c5faea58bbc03d0f9d5078871f5a9979d5571ebb145b3c0",
+  "getExecution": "(0x362834bcdf2aa8d653c5691e9269d2d2d018827517233715b8c0a64c274315ec, 0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c, 0xb8664841528e9Bd60D91AbB1bCF2975e67Fa0e17, 24058126 [2.405e7], 24058159 [2.405e7], 4, 4, true, false)",
+  "registry": "0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b"
+}

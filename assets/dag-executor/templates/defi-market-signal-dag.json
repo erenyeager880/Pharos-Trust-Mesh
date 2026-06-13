@@ -1,0 +1,41 @@
+{
+  "dagId": "defi-market-signal",
+  "tasks": {
+    "btc_price": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "BTC/USD",
+      "depends_on": [],
+      "output_key": "btc_usd"
+    },
+    "funding_rate": {
+      "type": "offchain_read",
+      "runner": "http_json",
+      "url": "https://fapi.binance.com/fapi/v1/premiumIndex?symbol=BTCUSDT",
+      "input_key": "funding_rate",
+      "depends_on": [],
+      "output_key": "funding"
+    },
+    "liquidity": {
+      "type": "offchain_read",
+      "runner": "http_json",
+      "url": "https://api.binance.com/api/v3/ticker/bookTicker?symbol=BTCUSDT",
+      "input_key": "liquidity",
+      "depends_on": [],
+      "output_key": "liquidity"
+    },
+    "trade_signal": {
+      "type": "compute",
+      "runner": "compute_signal",
+      "depends_on": ["btc_price", "funding_rate", "liquidity"],
+      "output_key": "signal"
+    },
+    "record_result": {
+      "type": "contract_call",
+      "runner": "simulated",
+      "depends_on": ["trade_signal"],
+      "output_key": "result"
+    }
+  }
+}

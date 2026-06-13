@@ -1,0 +1,9 @@
+﻿Pyth Hermes Price
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Feed:         ETH/USD
+Price:        166972860944 (expo -8)
+Human:        ~$1669.73
+Confidence:   55860943
+Publish time: 1781292388
+
+{"feedId":"0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace","alias":"ETH/USD","price":"166972860944","conf":"55860943","expo":-8,"publish_time":1781292388,"humanPrice":1669.7286094400001}

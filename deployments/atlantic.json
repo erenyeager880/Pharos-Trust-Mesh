@@ -1,0 +1,31 @@
+{
+  "network": "atlantic",
+  "chainId": 688689,
+  "rpcUrl": "https://atlantic.dplabs-internal.com",
+  "explorerUrl": "https://atlantic.pharosscan.xyz",
+  "deployer": "0xb8664841528e9Bd60D91AbB1bCF2975e67Fa0e17",
+  "DAGRegistry": {
+    "address": "0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b",
+    "requiredApprovals": 2,
+    "deployTx": "0xa1bf1db7f04fcf17304d83e2cc3a7892dfa03d34262ee2142ff34f218ad39f0c",
+    "verified": true,
+    "explorer": "https://atlantic.pharosscan.xyz/address/0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b"
+  },
+  "demoExecution": {
+    "executionId": "0xa58ec7e0943581b9a36f12f562f41c4d410dad84e50b5c3d2a46b90da023a0ed",
+    "dagHash": "0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47",
+    "resultHash": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "registerTx": "0xf4a161055d13f81e76e6012c4f19c6c9462271920ca8d66224123ac15e6e280b",
+    "finalizeTx": "0x31fbe1c4aecfa6a6c3febbe6fd3bace246a95b5baa3c2abe06f550dc8e97f5fd",
+    "completed": true
+  },
+  "saliDemoExecution": {
+    "executionId": "0x1e0bbba4f958936798253944bfa962396f6c389bf551a1bf8006572d963d7a25",
+    "layer0Hash": "0xe39e92dbd92b89812f35cd64a565a89c09ada8e2f80c0aab16558229c0304aa2",
+    "resultHash": "0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c",
+    "registerTx": "0x327dba11a9b4c730a34e20fe7653746b92ef70b716bc0fe9c37826f7a27588a8",
+    "finalizeTx": "0xd8183c861abee31dd9c4b5562d8e8e77eafb03b8983278daee2831da6c06dcb6",
+    "completed": true,
+    "saliLayer0Parallel": true
+  }
+}

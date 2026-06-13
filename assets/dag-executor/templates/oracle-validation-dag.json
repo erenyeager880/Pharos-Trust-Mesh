@@ -1,0 +1,41 @@
+{
+  "dagId": "oracle-validation",
+  "tasks": {
+    "fetch_agent_a": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "ETH/USD",
+      "depends_on": [],
+      "output_key": "price_a"
+    },
+    "fetch_agent_b": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "ETH/USD",
+      "depends_on": [],
+      "output_key": "price_b"
+    },
+    "fetch_agent_c": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "ETH/USD",
+      "depends_on": [],
+      "output_key": "price_c"
+    },
+    "consensus_check": {
+      "type": "compute",
+      "runner": "consensus_check",
+      "depends_on": ["fetch_agent_a", "fetch_agent_b", "fetch_agent_c"],
+      "output_key": "consensus"
+    },
+    "record_consensus": {
+      "type": "contract_call",
+      "runner": "simulated",
+      "depends_on": ["consensus_check"],
+      "output_key": "result"
+    }
+  }
+}

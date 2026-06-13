@@ -1,0 +1,51 @@
+{
+  "dagId": "payment",
+  "tasks": {
+    "check_wallet_balance": {
+      "type": "read",
+      "depends_on": [],
+      "contract": "0xMockWallet",
+      "fn": "balanceOf(address)(uint256)",
+      "output_key": "balance"
+    },
+    "check_recipient_kyc": {
+      "type": "read",
+      "depends_on": [],
+      "contract": "0xMockKYC",
+      "fn": "isVerified(address)(bool)",
+      "output_key": "kyc_ok"
+    },
+    "check_eth_usd_price": {
+      "type": "oracle_offchain",
+      "provider": "pyth_hermes",
+      "feed_id": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
+      "depends_on": [],
+      "output_key": "eth_usd"
+    },
+    "validate_transfer": {
+      "type": "compute",
+      "depends_on": ["check_wallet_balance", "check_recipient_kyc", "check_eth_usd_price"],
+      "inputs": {
+        "balance": "$check_wallet_balance.output",
+        "kyc_ok": "$check_recipient_kyc.output",
+        "eth_usd": "$check_eth_usd_price.output"
+      },
+      "output_key": "validated"
+    },
+    "execute_payment": {
+      "type": "contract_call",
+      "depends_on": ["validate_transfer"],
+      "contract": "0xMockPayment",
+      "fn": "transfer(address,uint256)",
+      "output_key": "tx_hash"
+    },
+    "post_receipt": {
+      "type": "contract_call",
+      "depends_on": ["execute_payment"],
+      "contract": "0xMockReceipt",
+      "fn": "record(bytes32)",
+      "args": ["$execute_payment.output"],
+      "output_key": "receipt_id"
+    }
+  }
+}

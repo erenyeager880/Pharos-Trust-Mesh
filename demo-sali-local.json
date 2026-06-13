@@ -1,0 +1,87 @@
+{
+  "network": "local",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "executionId": "0xa6ebca86ab5176d43c47b95388eff986cc83be82c2d922d596529abb172152e2",
+  "dagHash": "0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47",
+  "layerHashes": [
+    "0x6394386d1169d15c3961bc1fe246cf23dad1cb51e0e71a3092b90ec57cc826d6",
+    "0xf76baf8704a14d121db92b50895d423d756be9a4bbe78ccf4c23da975715c380",
+    "0x6bf130bdcd3c0fbae94f4c53aeeb8c396fcbd8691b00115cb070a351b1b1c356",
+    "0x52d5c4cf80d9b2793526edafe9edb3a48eb2941f4b12737480fbdb2463e86607"
+  ],
+  "resultHash": "0x9268bc834e48fd9269366c4b2bdd0504055a49c7bf0289dba0d2a7f71d6a6808",
+  "layer0Hash": "0x6394386d1169d15c3961bc1fe246cf23dad1cb51e0e71a3092b90ec57cc826d6",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 3,
+    "layer0BatchMs": 793
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "check_recipient_kyc",
+          "startedAt": 1781294145553,
+          "finishedAt": 1781294145554,
+          "durationMs": 1
+        },
+        {
+          "taskId": "check_wallet_balance",
+          "startedAt": 1781294145554,
+          "finishedAt": 1781294145579,
+          "durationMs": 25
+        },
+        {
+          "taskId": "check_eth_usd_price",
+          "startedAt": 1781294145469,
+          "finishedAt": 1781294146262,
+          "durationMs": 793
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 793
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "validate_transfer",
+          "startedAt": 1781294146262,
+          "finishedAt": 1781294146262,
+          "durationMs": 0
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "execute_payment",
+          "startedAt": 1781294146262,
+          "finishedAt": 1781294146267,
+          "durationMs": 5
+        }
+      ]
+    },
+    {
+      "layerIndex": 3,
+      "timings": [
+        {
+          "taskId": "post_receipt",
+          "startedAt": 1781294146267,
+          "finishedAt": 1781294146268,
+          "durationMs": 1
+        }
+      ]
+    }
+  ],
+  "registerTx": "0x566f6f5bec25b4a953535acd16e12ac01e564fee57e682a26afd63fd2e9e86ab",
+  "finalizeTx": "0xf9bb60a58c169d289f56f71ad3c2a837619c2ffe2d77fe61490919cda7b89741",
+  "getExecution": "(0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47, 0x9268bc834e48fd9269366c4b2bdd0504055a49c7bf0289dba0d2a7f71d6a6808, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 9, 4, 4, true, false)",
+  "verificationScoreB": "1",
+  "verificationScoreC": "1"
+}

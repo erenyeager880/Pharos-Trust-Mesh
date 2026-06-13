@@ -1,0 +1,36 @@
+{
+  "dagId": "custom",
+  "tasks": {
+    "oracle_btc_usd": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "BTC/USD",
+      "depends_on": [],
+      "output_key": "oracle_btc_usd"
+    },
+    "check_wallet_balance": {
+      "type": "read",
+      "runner": "native_balance",
+      "depends_on": [],
+      "output_key": "balance"
+    },
+    "aggregate_checks": {
+      "type": "compute",
+      "runner": "aggregate",
+      "depends_on": [
+        "oracle_btc_usd",
+        "check_wallet_balance"
+      ],
+      "output_key": "validated"
+    },
+    "record_result": {
+      "type": "contract_call",
+      "runner": "simulated",
+      "depends_on": [
+        "aggregate_checks"
+      ],
+      "output_key": "result"
+    }
+  }
+}

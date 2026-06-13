@@ -1,0 +1,17 @@
+﻿Workflow Optimization Report
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+Original (sequential):  6 steps, 6 serial rounds
+Optimized (layered):    4 layers, 3 max parallel tasks
+Critical path:          4 steps
+Parallelism gain:       33%
+Est. gas savings:       ~33% fewer submission rounds
+SALI friendly:          yes
+
+Layer 0: check_eth_usd_price, check_recipient_kyc, check_wallet_balance (Pyth Hermes: check_eth_usd_price)
+Layer 1: validate_transfer
+Layer 2: execute_payment
+Layer 3: post_receipt
+
+DAG hash: 0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47
+
+{"dagHash":"0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47","dagId":"payment","layers":4,"totalTasks":6,"sequentialSteps":6,"maxParallelTasks":3,"parallelismRatio":0.33,"criticalPathLength":4,"estimatedGasSavingsPercent":33,"sali_friendly":true,"layerPlan":[{"index":0,"tasks":["check_eth_usd_price","check_recipient_kyc","check_wallet_balance"],"width":3,"oracleTasks":["check_eth_usd_price"]},{"index":1,"tasks":["validate_transfer"],"width":1},{"index":2,"tasks":["execute_payment"],"width":1},{"index":3,"tasks":["post_receipt"],"width":1}],"hashSpec":[{"index":0,"tasks":[{"taskId":"check_eth_usd_price","type":"oracle_offchain","fields":["feedId","price","conf","expo","publishTime"]},{"taskId":"check_recipient_kyc","type":"read"},{"taskId":"check_wallet_balance","type":"read"}]},{"index":1,"tasks":[{"taskId":"validate_transfer","type":"compute"}]},{"index":2,"tasks":[{"taskId":"execute_payment","type":"contract_call"}]},{"index":3,"tasks":[{"taskId":"post_receipt","type":"contract_call"}]}],"layerGroups":[["check_eth_usd_price","check_recipient_kyc","check_wallet_balance"],["validate_transfer"],["execute_payment"],["post_receipt"]]}

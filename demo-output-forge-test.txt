@@ -1,0 +1,17 @@
+﻿No files changed, compilation skipped
+
+Ran 11 tests for test/DAGRegistry.t.sol:DAGRegistryTest
+[PASS] test_approveExecution_revertsDuplicate() (gas: 226049)
+[PASS] test_completeLayer_revertsOutOfOrder() (gas: 131882)
+[PASS] test_completeLayer_revertsWrongSubmitter() (gas: 133487)
+[PASS] test_completeLayer_revertsZeroHash() (gas: 131773)
+[PASS] test_completeLayer_storesHash() (gas: 188318)
+[PASS] test_failExecution_blocksFinalize() (gas: 159603)
+[PASS] test_finalize_requiresApprovals() (gas: 240072)
+[PASS] test_finalize_success_withApprovals() (gas: 455053)
+[PASS] test_publishCanonicalDag() (gas: 36542)
+[PASS] test_registerExecution_revertsZeroLayers() (gas: 11176)
+[PASS] test_registerExecution_success() (gas: 132655)
+Suite result: ok. 11 passed; 0 failed; 0 skipped; finished in 3.20ms (15.82ms CPU time)
+
+Ran 1 test suite in 15.44ms (3.20ms CPU time): 11 tests passed, 0 failed, 0 skipped (11 total tests)

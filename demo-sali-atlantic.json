@@ -1,0 +1,92 @@
+{
+  "network": "atlantic",
+  "chainId": 688689,
+  "registry": "0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b",
+  "explorer": "https://atlantic.pharosscan.xyz/address/0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b",
+  "executionId": "0x1e0bbba4f958936798253944bfa962396f6c389bf551a1bf8006572d963d7a25",
+  "dagHash": "0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47",
+  "layerHashes": [
+    "0xe39e92dbd92b89812f35cd64a565a89c09ada8e2f80c0aab16558229c0304aa2",
+    "0xd5e46261f733501f24145f7a200c9d2bf6a1237784ea9a6d6600c22cd6897f63",
+    "0x1e416876d9fe81316fc0fe7514f6abce9b622840a12533aef49a0d409930181f",
+    "0x3ea45b96ea86588e854d806cde555b17ecdf1792bb3bdc5c354cb7af2fd6548a"
+  ],
+  "layer0Hash": "0xe39e92dbd92b89812f35cd64a565a89c09ada8e2f80c0aab16558229c0304aa2",
+  "resultHash": "0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c",
+  "saliMetrics": {
+    "layer0Parallel": true,
+    "layer0Width": 3,
+    "layer0BatchMs": 631
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "check_recipient_kyc",
+          "startedAt": 1781294172703,
+          "finishedAt": 1781294172703,
+          "durationMs": 0
+        },
+        {
+          "taskId": "check_wallet_balance",
+          "startedAt": 1781294172703,
+          "finishedAt": 1781294173239,
+          "durationMs": 536
+        },
+        {
+          "taskId": "check_eth_usd_price",
+          "startedAt": 1781294172637,
+          "finishedAt": 1781294173267,
+          "durationMs": 631
+        },
+        {
+          "batch": true,
+          "layerIndex": 0,
+          "batchDurationMs": 631
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "validate_transfer",
+          "startedAt": 1781294173267,
+          "finishedAt": 1781294173267,
+          "durationMs": 0
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "execute_payment",
+          "startedAt": 1781294173267,
+          "finishedAt": 1781294173273,
+          "durationMs": 6
+        }
+      ]
+    },
+    {
+      "layerIndex": 3,
+      "timings": [
+        {
+          "taskId": "post_receipt",
+          "startedAt": 1781294173273,
+          "finishedAt": 1781294173274,
+          "durationMs": 1
+        }
+      ]
+    }
+  ],
+  "registerTx": "0x327dba11a9b4c730a34e20fe7653746b92ef70b716bc0fe9c37826f7a27588a8",
+  "finalizeTx": "0xd8183c861abee31dd9c4b5562d8e8e77eafb03b8983278daee2831da6c06dcb6",
+  "registerTxUrl": "https://atlantic.pharosscan.xyz/tx/0x327dba11a9b4c730a34e20fe7653746b92ef70b716bc0fe9c37826f7a27588a8",
+  "finalizeTxUrl": "https://atlantic.pharosscan.xyz/tx/0xd8183c861abee31dd9c4b5562d8e8e77eafb03b8983278daee2831da6c06dcb6",
+  "getExecution": "(0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47, 0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c, 0xb8664841528e9Bd60D91AbB1bCF2975e67Fa0e17, 24054480 [2.405e7], 24054512 [2.405e7], 4, 4, true, false)",
+  "verificationScoreB": "2",
+  "verificationScoreC": "2",
+  "completedAt": "2026-06-12T19:56:59.415Z"
+}

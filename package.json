@@ -1,0 +1,22 @@
+{
+  "name": "pharos-trust-mesh",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pharos TrustMesh — multi-agent trust layer with DAG evidence and on-chain verification",
+  "type": "commonjs",
+  "scripts": {
+    "compile-dag": "node assets/dag-executor/compile-dag.js",
+    "fetch-pyth": "node assets/dag-executor/fetch-pyth-hermes.js",
+    "compute-layer": "node assets/dag-executor/compute-layer-hash.js",
+    "execute-layer": "node assets/dag-executor/execute-layer.js",
+    "compose-dag": "node assets/dag-executor/compose-dag.js",
+    "workflow": "node scripts/run-workflow.js",
+    "update-catalog": "node scripts/update-catalog-hashes.js",
+    "demo:local": "node scripts/run-sali-demo.js",
+    "demo:atlantic": "node scripts/run-atlantic-sali-demo.js",
+    "verify-execution": "node scripts/verify-execution.js"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0"
+  }
+}

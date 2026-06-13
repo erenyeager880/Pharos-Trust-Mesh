@@ -1,0 +1,32 @@
+{
+  "dagId": "payment",
+  "tasks": {
+    "check_wallet_balance": {
+      "type": "read",
+      "runner": "native_balance",
+      "depends_on": [],
+      "output_key": "balance"
+    },
+    "check_eth_usd_price": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "ETH/USD",
+      "feed_id": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
+      "depends_on": [],
+      "output_key": "eth_usd"
+    },
+    "validate_transfer": {
+      "type": "compute",
+      "runner": "aggregate",
+      "depends_on": ["check_wallet_balance", "check_eth_usd_price"],
+      "output_key": "validated"
+    },
+    "record_result": {
+      "type": "contract_call",
+      "runner": "simulated",
+      "depends_on": ["validate_transfer"],
+      "output_key": "result"
+    }
+  }
+}

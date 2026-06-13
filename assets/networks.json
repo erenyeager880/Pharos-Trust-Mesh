@@ -1,0 +1,18 @@
+{
+  "atlantic": {
+    "name": "Pharos Atlantic Testnet",
+    "rpcUrl": "https://atlantic.dplabs-internal.com",
+    "wssUrl": "wss://atlantic.dplabs-internal.com",
+    "chainId": 688689,
+    "explorerUrl": "https://atlantic.pharosscan.xyz",
+    "explorerApiUrl": "https://api.socialscan.io/pharos-atlantic-testnet/v1/explorer/command_api/contract",
+    "nativeSymbol": "PHRS"
+  },
+  "pacific": {
+    "name": "Pharos Pacific Mainnet",
+    "rpcUrl": "https://pacific.dplabs-internal.com",
+    "chainId": 688688,
+    "explorerUrl": "https://pacific.pharosscan.xyz",
+    "nativeSymbol": "PHRS"
+  }
+}

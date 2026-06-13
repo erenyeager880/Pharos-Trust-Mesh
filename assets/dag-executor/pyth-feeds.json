@@ -1,0 +1,22 @@
+{
+  "feeds": {
+    "ETH/USD": "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace",
+    "BTC/USD": "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43",
+    "USDC/USD": "0xeaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a",
+    "DOGE/USD": "0xdcef50dd0a4cd2dcc17e45df1676dcb336a11a61c69df7a0299b0150c672d25c",
+    "SOL/USD": "0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d"
+  },
+  "aliases": {
+    "ETH": "ETH/USD",
+    "BTC": "BTC/USD",
+    "USDC": "USDC/USD",
+    "DOGE": "DOGE/USD",
+    "SOL": "SOL/USD",
+    "DOGEUSD": "DOGE/USD",
+    "ETHUSD": "ETH/USD"
+  },
+  "hermes_base": "https://hermes.pyth.network",
+  "notes": {
+    "PHRS/USD": "No Pyth Hermes feed for Pharos native PHRS; use read/native_balance for on-chain PHRS evidence"
+  }
+}

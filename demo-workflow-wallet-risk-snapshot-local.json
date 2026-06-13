@@ -1,0 +1,62 @@
+{
+  "network": "local",
+  "rpcUrl": "http://127.0.0.1:8545",
+  "dagId": "wallet-risk-snapshot",
+  "source": "E:\\pharos2\\pharos-skill-engine-0.1.0\\assets\\dag-executor\\generated\\wallet-risk-snapshot.json",
+  "dagHash": "0x5157a4a56821839d6010db86f034d94e6fe0a746db6c96079afdf362d7f7950b",
+  "layerHashes": [
+    "0xda28d0628de3845feb4d10994bf22a3dc810aedf2f93737754677b2364848968",
+    "0x7d6fed29f0cfe61244ddd151fe13a5a94718012e9123c597a99e131ff298b5a4",
+    "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
+  ],
+  "layer0Hash": "0xda28d0628de3845feb4d10994bf22a3dc810aedf2f93737754677b2364848968",
+  "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
+  "saliMetrics": {
+    "layer0Parallel": false,
+    "layer0Width": 1
+  },
+  "layerTimings": [
+    {
+      "layerIndex": 0,
+      "timings": [
+        {
+          "taskId": "phrs_balance",
+          "startedAt": 1781301659063,
+          "finishedAt": 1781301659098,
+          "durationMs": 35,
+          "runner": "native_balance"
+        }
+      ]
+    },
+    {
+      "layerIndex": 1,
+      "timings": [
+        {
+          "taskId": "snapshot",
+          "startedAt": 1781301659098,
+          "finishedAt": 1781301659098,
+          "durationMs": 0,
+          "runner": "aggregate"
+        }
+      ]
+    },
+    {
+      "layerIndex": 2,
+      "timings": [
+        {
+          "taskId": "record_result",
+          "startedAt": 1781301659098,
+          "finishedAt": 1781301659101,
+          "durationMs": 3,
+          "runner": "simulated"
+        }
+      ]
+    }
+  ],
+  "executeOnly": false,
+  "executionId": "0x989f729c0ad5aa50e9e12305ce00f3ea07f1d87639d51bcacb8e28fe153f0055",
+  "registerTx": "0xb65f56d0be8c51071163069db2109ed4c3caae2572fc1b0761e1200726e607c1",
+  "finalizeTx": "0x9f0aa9e6d962cedec3ef6d621e10e0955037c98c8bac045025d2d6ea8bd57ca1",
+  "getExecution": "(0x5157a4a56821839d6010db86f034d94e6fe0a746db6c96079afdf362d7f7950b, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+}

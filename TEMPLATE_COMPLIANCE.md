@@ -1,0 +1,12 @@
+# Pharos TrustMesh — Skill Engine Template Compliance Checklist
+
+- [x] Base `SKILL.md` sections: Prerequisites, Network Configuration, Capability Index, General Error Handling, Security Reminders, Write Operation Pre-checks
+- [x] Base references: `query.md`, `transaction.md`, `contract.md`, `script-gen.md`
+- [x] `assets/networks.json`, `assets/tokens.json`
+- [x] Contract in `assets/dag-executor/` AND `src/dag-executor/`
+- [x] `references/dag-executor.md` — 16 sections with 6-block template each
+- [x] 16 DAG Capability Index rows appended to `SKILL.md`
+- [x] Revert strings match between `DAGRegistry.sol` and reference error tables
+- [x] `forge build` / `forge test` — 11 tests pass
+- [x] Lifecycle demo captured in `demo-output.txt` (local Anvil)
+- [x] Atlantic deploy — `0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b` (verified on PharosScan)
