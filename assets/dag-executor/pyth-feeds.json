@@ -17,6 +17,7 @@
   },
   "hermes_base": "https://hermes.pyth.network",
   "notes": {
+    "dynamic_resolution": "Symbols not listed above are resolved live from the Hermes catalog (/v2/price_feeds?query=<SYMBOL>&asset_type=crypto), so any listed crypto token works (e.g. PEPE, ARB, LINK). The entries above are just a fast-path cache.",
     "PHRS/USD": "No Pyth Hermes feed for Pharos native PHRS; use read/native_balance for on-chain PHRS evidence"
   }
 }

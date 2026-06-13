@@ -1,13 +1,21 @@
 {
   "dagId": "custom",
   "tasks": {
-    "oracle_btc_usd": {
+    "oracle_arb_usd": {
       "type": "oracle_offchain",
       "runner": "pyth_price",
       "provider": "pyth_hermes",
-      "feed_alias": "BTC/USD",
+      "feed_alias": "ARB/USD",
       "depends_on": [],
-      "output_key": "oracle_btc_usd"
+      "output_key": "oracle_arb_usd"
+    },
+    "oracle_pepe_usd": {
+      "type": "oracle_offchain",
+      "runner": "pyth_price",
+      "provider": "pyth_hermes",
+      "feed_alias": "PEPE/USD",
+      "depends_on": [],
+      "output_key": "oracle_pepe_usd"
     },
     "check_wallet_balance": {
       "type": "read",
@@ -19,7 +27,8 @@
       "type": "compute",
       "runner": "aggregate",
       "depends_on": [
-        "oracle_btc_usd",
+        "oracle_arb_usd",
+        "oracle_pepe_usd",
         "check_wallet_balance"
       ],
       "output_key": "validated"

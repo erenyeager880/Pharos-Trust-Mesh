@@ -3,18 +3,18 @@
   "rpcUrl": "http://127.0.0.1:8545",
   "dagId": "custom",
   "source": "E:\\pharos2\\pharos-skill-engine-0.1.0\\assets\\dag-executor\\generated\\custom.json",
-  "dagHash": "0x0f68e72b475c7047fb661c9c75f5796955bf56914ebefdcdfe4056e9bcc0a0b8",
+  "dagHash": "0xbc16cf22a8358e5da8fb7ab01dc452022b0b80b8969c4a9b12a4b25463bb7ff1",
   "layerHashes": [
-    "0xfa1dc42c239a962778be28aeae2dc91839fae83418a797952169d541cc4d5434",
-    "0x28816e60a4bd9be732481c1206fea636045d23e0826f125201f5760cc8981cfa",
+    "0xd1bc5c37c1fbbdbf1050e423ccead539945c872c021ce25e40072cfcdc785cf3",
+    "0xdc8b1b87da1af077eed5b22091f8bb4e93401fc5cceff32b74e4f4fd3a7e9c8f",
     "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
   ],
-  "layer0Hash": "0xfa1dc42c239a962778be28aeae2dc91839fae83418a797952169d541cc4d5434",
+  "layer0Hash": "0xd1bc5c37c1fbbdbf1050e423ccead539945c872c021ce25e40072cfcdc785cf3",
   "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
   "saliMetrics": {
     "layer0Parallel": true,
-    "layer0Width": 2,
-    "layer0BatchMs": 472
+    "layer0Width": 3,
+    "layer0BatchMs": 980
   },
   "layerTimings": [
     {
@@ -22,22 +22,29 @@
       "timings": [
         {
           "taskId": "check_wallet_balance",
-          "startedAt": 1781301666507,
-          "finishedAt": 1781301666589,
-          "durationMs": 82,
+          "startedAt": 1781381105632,
+          "finishedAt": 1781381105811,
+          "durationMs": 179,
           "runner": "native_balance"
         },
         {
-          "taskId": "oracle_btc_usd",
-          "startedAt": 1781301666509,
-          "finishedAt": 1781301666979,
-          "durationMs": 470,
+          "taskId": "oracle_pepe_usd",
+          "startedAt": 1781381105771,
+          "finishedAt": 1781381106603,
+          "durationMs": 832,
+          "runner": "pyth_price"
+        },
+        {
+          "taskId": "oracle_arb_usd",
+          "startedAt": 1781381105635,
+          "finishedAt": 1781381106611,
+          "durationMs": 976,
           "runner": "pyth_price"
         },
         {
           "batch": true,
           "layerIndex": 0,
-          "batchDurationMs": 472
+          "batchDurationMs": 980
         }
       ]
     },
@@ -46,8 +53,8 @@
       "timings": [
         {
           "taskId": "aggregate_checks",
-          "startedAt": 1781301666979,
-          "finishedAt": 1781301666979,
+          "startedAt": 1781381106611,
+          "finishedAt": 1781381106611,
           "durationMs": 0,
           "runner": "aggregate"
         }
@@ -58,18 +65,24 @@
       "timings": [
         {
           "taskId": "record_result",
-          "startedAt": 1781301666979,
-          "finishedAt": 1781301666982,
-          "durationMs": 3,
+          "startedAt": 1781381106611,
+          "finishedAt": 1781381106617,
+          "durationMs": 6,
           "runner": "simulated"
         }
       ]
     }
   ],
   "executeOnly": false,
-  "executionId": "0x4861f05ed18b64364640444477248899d3a822b4c9dadee48004d44097fd119b",
-  "registerTx": "0xc7fe313086bbf5276cdc8d18a9c01e411e368c57a1ebd7501a3bf7958591bb77",
-  "finalizeTx": "0x1871a3cb1c8a3dd7a4746626607cb2a247c799230e1ea3b5bb7c8f0724118c64",
-  "getExecution": "(0x0f68e72b475c7047fb661c9c75f5796955bf56914ebefdcdfe4056e9bcc0a0b8, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "verifierAddresses": {
+    "verifierB": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "verifierC": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+  },
+  "verifierKeyMode": "local-mnemonic",
+  "executionId": "0x46ba8af45100c50128351be2e697f947b3dd8708099c082bf6550a401b09528e",
+  "registerTx": "0x9ff1ab5c7964456777e63d2bd5a1668b42d8f8c06a413e0bff64a88f7a039965",
+  "finalizeTx": "0xda034ef018491c4a259e58da8054a53dc4f4560096014b36177f1c4ab8f8040c",
+  "getExecution": "(0xbc16cf22a8358e5da8fb7ab01dc452022b0b80b8969c4a9b12a4b25463bb7ff1, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
   "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 }

@@ -7,6 +7,10 @@ const { hashPythTaskOutput, hashLayer } = require("./hash-spec");
 
 const PYTH_FEEDS_PATH = path.join(__dirname, "pyth-feeds.json");
 
+// In-memory cache of dynamically resolved feeds so repeated lookups in one run
+// (e.g. multiple oracle tasks in a DAG) don't re-hit the Hermes catalog.
+const dynamicFeedCache = new Map();
+
 function loadFeeds() {
   return JSON.parse(fs.readFileSync(PYTH_FEEDS_PATH, "utf8"));
 }
@@ -21,6 +25,8 @@ function normalizeAlias(arg) {
   return `${upper}/USD`;
 }
 
+// Static resolver — only checks the local pyth-feeds.json map. Kept synchronous
+// for backward compatibility with existing callers.
 function resolveFeedId(arg) {
   const config = loadFeeds();
   if (arg.startsWith("0x")) return arg;
@@ -33,9 +39,63 @@ function resolveFeedId(arg) {
   return feedId;
 }
 
+// Look up an arbitrary token symbol in the live Pyth Hermes catalog.
+// Works for any listed crypto feed (PEPE, ARB, LINK, ...), not just the
+// hand-curated ones in pyth-feeds.json.
+async function lookupFeedFromHermes(normalized, hermesBase) {
+  if (dynamicFeedCache.has(normalized)) return dynamicFeedCache.get(normalized);
+
+  const [base, quote = "USD"] = normalized.split("/");
+  const url = `${hermesBase}/v2/price_feeds?query=${encodeURIComponent(base)}&asset_type=crypto`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Hermes catalog HTTP ${res.status}: ${res.statusText} while resolving ${normalized}`);
+  }
+  const list = await res.json();
+  if (!Array.isArray(list) || list.length === 0) {
+    throw new Error(`No Pyth crypto feed found for "${base}". Check the symbol or pass a raw 0x feed_id.`);
+  }
+
+  const wantBase = base.toUpperCase();
+  const wantQuote = quote.toUpperCase();
+  const match =
+    list.find(
+      (f) =>
+        f?.attributes?.base?.toUpperCase() === wantBase &&
+        f?.attributes?.quote_currency?.toUpperCase() === wantQuote
+    ) ||
+    // Fall back to any quote currency if the exact quote isn't listed.
+    list.find((f) => f?.attributes?.base?.toUpperCase() === wantBase);
+
+  if (!match?.id) {
+    const sample = list
+      .slice(0, 5)
+      .map((f) => f?.attributes?.symbol)
+      .filter(Boolean)
+      .join(", ");
+    throw new Error(
+      `No exact Pyth feed for ${normalized}. Closest symbols: ${sample || "none"}. Pass a raw 0x feed_id to override.`
+    );
+  }
+
+  const feedId = match.id.startsWith("0x") ? match.id : `0x${match.id}`;
+  dynamicFeedCache.set(normalized, feedId);
+  return feedId;
+}
+
+// Async resolver: static map first, then live Hermes catalog for any token.
+async function resolveFeedIdAsync(arg, hermesBase) {
+  if (String(arg).startsWith("0x")) return String(arg);
+  const config = loadFeeds();
+  const normalized = normalizeAlias(arg);
+  const fromStatic = config.feeds[normalized] || config.feeds[arg];
+  if (fromStatic) return fromStatic;
+  return lookupFeedFromHermes(normalized, hermesBase || config.hermes_base);
+}
+
 async function fetchPrice(feedIdOrAlias) {
   const config = loadFeeds();
-  const feedId = resolveFeedId(feedIdOrAlias);
+  const feedId = await resolveFeedIdAsync(feedIdOrAlias, config.hermes_base);
   const url = `${config.hermes_base}/v2/updates/price/latest?ids[]=${feedId}&parsed=true`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Hermes HTTP ${res.status}: ${res.statusText}`);
@@ -64,8 +124,9 @@ async function main() {
   console.log("Pyth Hermes Price");
   console.log("─────────────────");
   console.log(`Feed:         ${out.alias || out.feedId}`);
+  console.log(`Feed ID:      ${out.feedId}`);
   console.log(`Price:        ${out.price} (expo ${out.expo})`);
-  console.log(`Human:        ~$${out.humanPrice.toFixed(2)}`);
+  console.log(`Human:        ~$${out.humanPrice.toFixed(out.humanPrice < 1 ? 8 : 2)}`);
   console.log(`Confidence:   ${out.conf}`);
   console.log(`Publish time: ${out.publish_time}`);
   console.log("");
@@ -79,4 +140,11 @@ if (require.main === module) {
   });
 }
 
-module.exports = { fetchPrice, hashPythTaskOutput, hashLayer, resolveFeedId };
+module.exports = {
+  fetchPrice,
+  hashPythTaskOutput,
+  hashLayer,
+  resolveFeedId,
+  resolveFeedIdAsync,
+  lookupFeedFromHermes,
+};

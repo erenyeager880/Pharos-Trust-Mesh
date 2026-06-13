@@ -66,7 +66,7 @@ Default to **Atlantic** unless the user specifies mainnet.
 | Deploy Solidity contract | `forge script` | → `references/contract.md` |
 | Generate interaction scripts | templates in `assets/templates/` | → `references/script-gen.md` |
 | Compile task DAG / dependency graph / workflow optimization | `node` + `compile-dag.js` | → `references/dag-executor.md#compile-dag` |
-| Fetch Pyth price / ETH BTC USDC / off-chain oracle / Hermes market data | `fetch-pyth-hermes.js` + Hermes API | → `references/dag-executor.md#fetch-pyth-hermes` |
+| Fetch Pyth price / **any token symbol** (ETH, BTC, ARB, PEPE, LINK, …) / off-chain oracle / Hermes market data | `fetch-pyth-hermes.js` + Hermes API (dynamic catalog lookup) | → `references/dag-executor.md#fetch-pyth-hermes` |
 | Run canonical workflow / replay payment DAG / DAG by ID / workflow catalog | `--catalog` lookup | → `references/dag-executor.md#catalog-lookup` |
 | Deploy DAG Registry / execution registry / agent trust contract on Pharos | `forge script` + DAGRegistry template | → `references/dag-executor.md#deploy-dagregistry` |
 | Verify DAG Registry / confirm contract on Pharos Scan | `forge verify-contract` | → `references/dag-executor.md#verify-dagregistry` |
@@ -91,29 +91,98 @@ Default to **Atlantic** unless the user specifies mainnet.
 
 ## User prompts → agent workflow
 
-When a user describes a multi-agent task in plain English, follow this decision tree:
+Users speak in plain English. They will **not** say "run the oracle-validation template" — they say things like *"I want to check BTC price, snapshot my wallet, and verify a source, then prove it on-chain."* Your job is to turn that into the right workflow. Always follow these five steps in order.
 
-1. **List workflows?** → `node assets/dag-executor/compile-dag.js --catalog`
-2. **Price only (no on-chain)?** → `node assets/dag-executor/fetch-pyth-hermes.js BTC/USD` — no `PRIVATE_KEY` needed
-3. **Known real-data workflow?** → `npm run workflow -- --template <id> --network local|atlantic`
-4. **Simple price + balance?** → `npm run compose-dag -- --oracle BTC/USD --balance` then `npm run workflow -- --dag assets/dag-executor/generated/<file>.json`
-5. **Payment SALI demo?** → `npm run workflow -- --catalog payment --network local|atlantic`
-6. **Custom logic?** → write DAG JSON per `references/dag-schema.md`, then `npm run workflow -- --dag <path>`
-7. **Verify?** → `npm run verify-execution demo-workflow-<dagId>-<network>.json`
+### Step 1 — Understand & decompose the request
 
-**Network:** `--network local` needs no `PRIVATE_KEY` (Anvil). `--network atlantic` requires `PRIVATE_KEY` in `.env` and PHRS for gas. For real multi-agent runs, set `VERIFIER_B_PRIVATE_KEY` and `VERIFIER_C_PRIVATE_KEY` too; otherwise the runner uses funded demo verifier wallets.
+Break the user's sentence into individual capabilities (tasks). Map each phrase to a task type:
 
-### Example prompts
+| User phrase (any wording) | Task |
+|---------------------------|------|
+| "price of X", "how much is X", "check X/USD", "oracle for X" | Pyth oracle price (**any token** — see Step 5) |
+| "my balance", "wallet balance", "how much PHRS I have", "wallet risk" | native PHRS balance read |
+| "consensus", "multiple agents agree", "cross-check price" | oracle consensus (N price fetches) |
+| "market signal", "funding", "order book", "liquidity" | DeFi market signal |
+| "verify this URL/source", "hash this document/article" | URL / content-hash evidence |
+| "prove it", "record on-chain", "make it trustworthy", "anchor", "register" | run through DAGRegistry (on-chain lifecycle) |
+| "list / what can you do / show workflows" | `node assets/dag-executor/compile-dag.js --catalog` |
 
-| User says | Agent runs |
-|-----------|------------|
-| "Verify payment: balance + ETH price before transfer" | `npm run workflow -- --catalog payment --network local` |
-| "Three agents fetch BTC/USD and reach oracle consensus" | `npm run workflow -- --template oracle-validation --oracle BTC/USD --network local` |
-| "DeFi market signal from price, funding, liquidity" | `npm run workflow -- --template defi-market-signal --network local` |
-| "Snapshot my wallet PHRS balance for risk evidence" | `npm run workflow -- --template wallet-risk-snapshot --network local` |
-| "Verify research sources by URL content hash" | `npm run workflow -- --template research-url-verification --network local` |
-| "Get BTC price and check my balance" | `npm run compose-dag -- --oracle BTC/USD --balance` then workflow on generated DAG |
-| "Fetch any Pyth price" | `node assets/dag-executor/fetch-pyth-hermes.js BTC/USD` |
+If it is **just a price** with no "prove/record on-chain" intent → run `fetch-pyth-hermes.js` and stop (no wallet needed). Otherwise continue.
+
+### Step 2 — ALWAYS ask: demo or live testnet?
+
+Before any run that touches the chain, ask the user **exactly this**:
+
+> Do you want to run this as a **demo** (local Anvil, no real keys or gas) or **live on Atlantic testnet** (real PRIVATE_KEY + PHRS gas)?
+
+- **demo** → `--network local` (no keys required, uses Anvil test accounts)
+- **live / atlantic / testnet** → `--network atlantic` → go to Step 3 first
+
+Never assume. Default to **demo** only if the user explicitly says "quick", "just show me", or "demo".
+
+### Step 3 — Atlantic preflight (only if user chose live testnet)
+
+Before sending any Atlantic transaction, confirm the required keys are present in `.env`:
+
+1. **`PRIVATE_KEY`** — required (executor). Reject the run if missing.
+2. For **multi-agent** runs (consensus, verifier signoff, "multiple agents"): check **`VERIFIER_B_PRIVATE_KEY`** and **`VERIFIER_C_PRIVATE_KEY`**.
+   - Both set → independent verifier agents (best for real multi-agent proof).
+   - Neither set → tell the user it will fall back to funded demo verifier wallets, and confirm that's OK.
+   - Only one set → **stop**; the runner requires both or neither.
+3. Confirm the three addresses are **distinct** and that the executor has PHRS for gas (`cast balance <addr> --rpc-url $RPC --ether`).
+
+Quick check command (reads `.env` directly, no extra deps):
+
+```bash
+node -e "const fs=require('fs');const e=fs.existsSync('.env')?fs.readFileSync('.env','utf8'):'';['PRIVATE_KEY','VERIFIER_B_PRIVATE_KEY','VERIFIER_C_PRIVATE_KEY'].forEach(k=>console.log(k, new RegExp('^'+k+'=.+','m').test(e)?'set':'MISSING'))"
+```
+
+Report which keys are set/missing before proceeding, and only continue once the requirements above are met.
+
+### Step 4 — Select & run the workflow
+
+Pick the smallest thing that satisfies the decomposed tasks:
+
+| Decomposed tasks | Command (`<net>` = `local` or `atlantic`) |
+|------------------|-------------------------------------------|
+| Balance + price → record (payment-style) | `npm run workflow -- --catalog payment --network <net>` |
+| Multiple price fetches → consensus | `npm run workflow -- --template oracle-validation --oracle <TOKEN>/USD --network <net>` |
+| Price + funding + order book → signal | `npm run workflow -- --template defi-market-signal --network <net>` |
+| Wallet balance risk snapshot | `npm run workflow -- --template wallet-risk-snapshot --network <net>` |
+| Verify URLs / sources by content hash | `npm run workflow -- --template research-url-verification --network <net>` |
+| Mixed ad-hoc (e.g. "X price + my balance") | `npm run compose-dag -- --oracle <TOKEN>/USD --balance` then `npm run workflow -- --dag assets/dag-executor/generated/<file>.json --network <net>` |
+| Something none of these cover | author DAG JSON per `references/dag-schema.md`, then `npm run workflow -- --dag <path> --network <net>` |
+
+### Step 5 — Tokens: any symbol works
+
+Pass the user's token straight through as `<SYMBOL>` or `<SYMBOL>/USD`. The resolver checks the local fast-path map first, then **looks the symbol up live in the Pyth Hermes catalog**, so tokens beyond ETH/BTC/USDC (e.g. `ARB`, `PEPE`, `LINK`, `SOL`) work without editing any file.
+
+```bash
+node assets/dag-executor/fetch-pyth-hermes.js ARB        # dynamic lookup
+node assets/dag-executor/fetch-pyth-hermes.js PEPE/USD   # explicit pair
+node assets/dag-executor/fetch-pyth-hermes.js 0x<feedId> # raw feed id override
+```
+
+If a symbol has no Pyth crypto feed, report that and suggest the closest matches the catalog returned (or ask for a raw `0x` feed id). For Pharos native **PHRS** there is no Pyth feed — use the native balance read instead.
+
+### Step 6 — Verify
+
+After any run, verify the on-chain evidence:
+
+```bash
+npm run verify-execution demo-workflow-<dagId>-<network>.json
+```
+
+### Worked example
+
+> **User:** "Check the price of ARB and PEPE, snapshot my wallet, and prove it on-chain."
+
+1. Decompose → 2 oracle prices (ARB, PEPE) + balance + on-chain record.
+2. Ask: demo or live Atlantic? → user says "demo".
+3. (skip — demo needs no keys)
+4. Run: `npm run compose-dag -- --oracle ARB/USD --oracle PEPE/USD --balance` then `npm run workflow -- --dag assets/dag-executor/generated/custom.json --network local`
+5. ARB/PEPE resolved live from Hermes.
+6. `npm run verify-execution demo-workflow-custom-local.json`
 
 ---
 
