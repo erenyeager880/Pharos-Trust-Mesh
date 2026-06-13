@@ -73,25 +73,69 @@ VERIFIER_C_PRIVATE_KEY=0x...
 
 When verifier keys are provided, the workflow runner checks all three addresses are distinct and funded before sending transactions. If verifier keys are omitted, it uses deterministic demo verifier wallets and funds them from `PRIVATE_KEY`.
 
+## Prerequisites
+
+| Tool | Purpose |
+|------|---------|
+| [Foundry](https://book.getfoundry.sh/getting-started/installation) | `forge build`, `forge test`, `cast` |
+| Node.js 18+ | DAG compiler, workflow runner, Pyth helpers |
+| `.env` (Atlantic only) | Copy from `.env.example` — `PRIVATE_KEY` required for testnet writes |
+
+Local workflows (`--network local`) use Anvil test accounts and need no keys.
+
 ## Quick Start
 
 ```bash
 npm install
 forge build
-forge test
+forge test                    # 32 DAGRegistry unit tests
 node assets/dag-executor/fetch-pyth-hermes.js BTC/USD
 npm run demo:local
+npm run verify-execution demo-workflow-payment-local.json
 ```
 
-**Live Atlantic deployment:** [`0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b`](https://atlantic.pharosscan.xyz/address/0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b) (verified)
+## Testing
 
-See [`references/dag-executor.md`](references/dag-executor.md) for the full agent command reference.
+| Layer | Command | What it validates |
+|-------|---------|-------------------|
+| Unit (Solidity) | `forge test` | `DAGRegistry` register → layer → approve → finalize/fail paths |
+| Integration | `npm run verify-execution <artifact.json>` | On-chain hashes match demo workflow output |
+
+Full guide: [`references/testing.md`](references/testing.md). Captured outputs: `demo-output-forge-test.txt`, `demo-output.txt`.
+
+## npm Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run demo:local` | Payment workflow on local Anvil |
+| `npm run demo:atlantic` | Payment workflow on Atlantic (needs `PRIVATE_KEY`) |
+| `npm run workflow -- --template <id> --network local` | Run a catalog/template workflow |
+| `npm run compose-dag -- --oracle BTC/USD --balance` | Build a custom DAG JSON |
+| `npm run verify-execution <file.json>` | Cross-check on-chain state vs artifact |
+| `npm run compile-dag` | Compile DAG file to layered plan + `dagHash` |
+
+## Live deployment
+
+**Atlantic DAGRegistry:** [`0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b`](https://atlantic.pharosscan.xyz/address/0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b) (verified)
+
+## Documentation map
+
+| File | Audience | Contents |
+|------|----------|----------|
+| [`SKILL.md`](SKILL.md) | AI agents | Capability index, plain-English workflow routing |
+| [`references/dag-executor.md`](references/dag-executor.md) | Agents / operators | Per-command templates for every DAGRegistry operation |
+| [`references/dag-schema.md`](references/dag-schema.md) | Authors | DAG JSON schema and template catalog |
+| [`references/testing.md`](references/testing.md) | Developers / judges | Test commands, coverage matrix, CI checklist |
+| [`SUBMISSION.md`](SUBMISSION.md) | Hackathon reviewers | Demo commands and live contract link |
 
 ## Structure
 
 ```
-SKILL.md              Agent entry point
-references/           query, transaction, contract, dag-executor, dag-schema
-assets/dag-executor/  Compiler, catalog, templates, Pyth helpers
-src/dag-executor/     Foundry compile target
+SKILL.md                 Agent entry point
+references/              query, transaction, contract, dag-executor, dag-schema, testing
+assets/dag-executor/     Compiler, catalog, templates, Pyth helpers
+src/dag-executor/        DAGRegistry.sol (Foundry compile target)
+test/                    DAGRegistry.t.sol (32 Foundry tests)
+scripts/                 Workflow runner, demo scripts, verify-execution
+demo-workflow-*.json     Integration test artifacts (local + Atlantic)
 ```

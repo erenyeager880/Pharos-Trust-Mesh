@@ -16,6 +16,25 @@
 
 - **DAGRegistry:** [0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b](https://atlantic.pharosscan.xyz/address/0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b) (verified)
 
+## Test suite
+
+**32 Foundry unit tests** in `test/DAGRegistry.t.sol` cover the full `DAGRegistry` lifecycle:
+
+```bash
+npm install
+forge build && forge test
+```
+
+Coverage includes registration, ordered layer completion, multi-agent approvals (`requiredApprovals = 2`), finalization, failure paths, canonical DAG publishing, and all documented revert strings. Captured output: `demo-output-forge-test.txt`.
+
+**Integration verification** (off-chain evidence → on-chain anchors):
+
+```bash
+npm run verify-execution demo-workflow-payment-local.json
+```
+
+See [`references/testing.md`](references/testing.md) for the full matrix and CI checklist.
+
 ## Demo
 
 ```bash
@@ -32,6 +51,9 @@ Atlantic (requires `PRIVATE_KEY` in `.env`; optional independent verifier keys a
 
 ```bash
 npm run demo:atlantic
+npm run verify-execution demo-sali-atlantic.json
 ```
 
 For real multi-agent testnet runs, set `VERIFIER_B_PRIVATE_KEY` and `VERIFIER_C_PRIVATE_KEY`. If omitted, the demo runner uses funded deterministic verifier wallets.
+
+Demo transcript: `demo-output.txt`.

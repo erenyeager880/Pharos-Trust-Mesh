@@ -1,5 +1,14 @@
 # Pharos TrustMesh — Demo Transcript
 
+## 0. Contract tests (Foundry)
+
+```bash
+forge build && forge test
+# 32 passed — see demo-output-forge-test.txt
+```
+
+Coverage: `registerExecution`, `completeLayer`, `approveExecution`, `finalizeExecution`, `failExecution`, `publishCanonicalDag`, view helpers, and all revert guards.
+
 ## 1. Shipped workflows (real evidence)
 
 | dagId | Layer 0 evidence |
@@ -44,6 +53,7 @@ npm run workflow -- --dag assets/dag-executor/generated/custom.json --network lo
 ## Commands
 
 ```bash
+forge build && forge test
 npm run demo:local
 npm run workflow -- --template oracle-validation --oracle BTC/USD --network local
 npm run workflow -- --template defi-market-signal --network local

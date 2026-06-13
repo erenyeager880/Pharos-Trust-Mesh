@@ -10,7 +10,7 @@ Do not attempt operations outside this skill package without explicit user appro
 
 ## Prerequisites
 
-1. **Foundry** — `cast` and `forge` must be installed (`forge --version`, `cast --version`).
+1. **Foundry** — `cast` and `forge` must be installed (`forge --version`, `cast --version`). Run `forge test` (32 tests) before Atlantic writes — see `references/testing.md`.
 2. **Node.js** — for `compile-dag.js` and `fetch-pyth-hermes.js` (`node --version`).
 3. **Wallet** — export private key: `export PRIVATE_KEY=0x...`
 4. **Convenience vars:**
@@ -86,6 +86,7 @@ Default to **Atlantic** unless the user specifies mainnet.
 | Multi-agent workflow from plain English | `npm run workflow -- --template <id>` | → `references/dag-schema.md` |
 | Compose custom DAG (oracles, balance) | `npm run compose-dag` | → `references/dag-schema.md` |
 | Real-data workflow templates | `--template oracle-validation|defi-market-signal|wallet-risk-snapshot|research-url-verification` | → `references/dag-schema.md` |
+| Run contract tests / validate DAGRegistry behavior | `forge test` | → `references/testing.md` |
 
 ---
 

@@ -957,3 +957,43 @@ npm run verify-execution demo-workflow-oracle-validation-local.json
 ### Output
 
 Prints `PASS`/`FAIL` per layer hash, `completed`, and `resultHash`. Exit code `0` when all match.
+
+---
+
+## forge-test
+
+### Overview
+
+Runs Foundry unit tests for `DAGRegistry.sol`. Validates lifecycle transitions, access control, verifier scoring, and every documented revert string.
+
+### Command Template
+
+```bash
+forge build
+forge test
+forge test -vvv
+forge test --match-test finalize
+```
+
+### Output Parsing
+
+| Field | Description |
+|-------|-------------|
+| `Suite result: ok` | All tests passed |
+| `[PASS] test_*` | Individual test name and gas |
+| Exit code `0` | Success |
+
+### Error Handling
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `forge: command not found` | Foundry not installed | Install Foundry |
+| `Compiler run failed` | Solidity error | Run `forge build` and fix compile errors |
+| `[FAIL]` | Assertion or revert mismatch | Run `forge test -vvv` for trace |
+
+### Agent Guidelines
+
+1. Run `forge test` after any change to `src/dag-executor/DAGRegistry.sol` or `test/DAGRegistry.t.sol`.
+2. Expect **32 tests** in `test/DAGRegistry.t.sol` (captured in `demo-output-forge-test.txt`).
+3. If a revert string changes in the contract, update error tables in this file **and** tests in `DAGRegistry.t.sol`.
+4. Full coverage matrix: → [`references/testing.md`](testing.md).
