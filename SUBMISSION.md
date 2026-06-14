@@ -14,8 +14,7 @@
 
 ## Live contract (Atlantic)
 
-- **DAGRegistry:** [0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2](https://atlantic.pharosscan.xyz/address/0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2) (verified)
-- **Deployer:** `0xE2b3B061Bb750676A09c91245faf1Ec708D78c92`
+- **DAGRegistry:** [0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2](https://atlantic.pharosscan.xyz/address/0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2) (verified). Details: `deployments/atlantic.json`
 
 ## Test suite
 

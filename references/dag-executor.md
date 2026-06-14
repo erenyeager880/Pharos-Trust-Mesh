@@ -4,7 +4,7 @@
 > Private Key: Pass explicitly via `--private-key $PRIVATE_KEY` for all write operations.
 >
 > Atlantic defaults: RPC `https://atlantic.dplabs-internal.com`, chain ID `688689`, explorer `https://atlantic.pharosscan.xyz`.
-> Payment DAG `dagHash`: `0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47`.
+> Payment DAG `dagHash`: `0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91`.
 
 ---
 
@@ -59,7 +59,7 @@ node assets/dag-executor/compile-dag.js --catalog payment
 
 1. Run `compile-dag` before any on-chain registration to obtain `dagHash` and `layers` (total layer count).
 2. Save `hashSpec` — it defines which fields each task type must include when computing task output hashes.
-3. For payment DAG, expect `dagHash` `0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47` and 4 layers.
+3. For payment DAG, expect `dagHash` `0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91` and 3 layers.
 4. Use `layerPlan` to drive sequential `completeLayer` calls (index 0 … N−1).
 
 ---
@@ -784,7 +784,7 @@ cast send $REGISTRY "publishCanonicalDag(bytes32,string)" \
 ### Agent Guidelines
 
 1. Complete Write Operation Pre-checks (see SKILL.md)
-2. Use catalog `dagHash` values — e.g. payment hash `0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47`
+2. Use catalog `dagHash` values — e.g. payment hash `0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91`
 3. Execute `publishCanonicalDag` once per canonical workflow
 4. Verify name via `cast call $REGISTRY "canonicalDagNames(bytes32)(string)" $DAG_HASH`
 5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`

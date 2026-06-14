@@ -1,17 +1,16 @@
 ﻿Workflow Optimization Report
 ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
-Original (sequential):  6 steps, 6 serial rounds
-Optimized (layered):    4 layers, 3 max parallel tasks
-Critical path:          4 steps
-Parallelism gain:       33%
-Est. gas savings:       ~33% fewer submission rounds
+Original (sequential):  4 steps, 4 serial rounds
+Optimized (layered):    3 layers, 2 max parallel tasks
+Critical path:          3 steps
+Parallelism gain:       25%
+Est. gas savings:       ~25% fewer submission rounds
 SALI friendly:          yes
 
-Layer 0: check_eth_usd_price, check_recipient_kyc, check_wallet_balance (Pyth Hermes: check_eth_usd_price)
+Layer 0: check_eth_usd_price, check_wallet_balance (Pyth Hermes: check_eth_usd_price)
 Layer 1: validate_transfer
-Layer 2: execute_payment
-Layer 3: post_receipt
+Layer 2: record_result
 
-DAG hash: 0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47
+DAG hash: 0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91
 
-{"dagHash":"0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47","dagId":"payment","layers":4,"totalTasks":6,"sequentialSteps":6,"maxParallelTasks":3,"parallelismRatio":0.33,"criticalPathLength":4,"estimatedGasSavingsPercent":33,"sali_friendly":true,"layerPlan":[{"index":0,"tasks":["check_eth_usd_price","check_recipient_kyc","check_wallet_balance"],"width":3,"oracleTasks":["check_eth_usd_price"]},{"index":1,"tasks":["validate_transfer"],"width":1},{"index":2,"tasks":["execute_payment"],"width":1},{"index":3,"tasks":["post_receipt"],"width":1}],"hashSpec":[{"index":0,"tasks":[{"taskId":"check_eth_usd_price","type":"oracle_offchain","fields":["feedId","price","conf","expo","publishTime"]},{"taskId":"check_recipient_kyc","type":"read"},{"taskId":"check_wallet_balance","type":"read"}]},{"index":1,"tasks":[{"taskId":"validate_transfer","type":"compute"}]},{"index":2,"tasks":[{"taskId":"execute_payment","type":"contract_call"}]},{"index":3,"tasks":[{"taskId":"post_receipt","type":"contract_call"}]}],"layerGroups":[["check_eth_usd_price","check_recipient_kyc","check_wallet_balance"],["validate_transfer"],["execute_payment"],["post_receipt"]]}
+{"dagHash":"0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91","dagId":"payment","layers":3,"totalTasks":4,"sequentialSteps":4,"maxParallelTasks":2,"parallelismRatio":0.25,"criticalPathLength":3,"estimatedGasSavingsPercent":25,"sali_friendly":true,"layerPlan":[{"index":0,"tasks":["check_eth_usd_price","check_wallet_balance"],"width":2,"oracleTasks":["check_eth_usd_price"]},{"index":1,"tasks":["validate_transfer"],"width":1},{"index":2,"tasks":["record_result"],"width":1}],"hashSpec":[{"index":0,"tasks":[{"taskId":"check_eth_usd_price","type":"oracle_offchain","fields":["feedId","price","conf","expo","publishTime"],"provider":"pyth_hermes"},{"taskId":"check_wallet_balance","type":"read","fields":["contract","callResult"]}]},{"index":1,"tasks":[{"taskId":"validate_transfer","type":"compute","fields":["inputsHash"]}]},{"index":2,"tasks":[{"taskId":"record_result","type":"contract_call","fields":["txHash"]}]}],"saliPlan":[{"layerIndex":0,"parallelTasks":["check_eth_usd_price","check_wallet_balance"],"executionMode":"parallel","conflictFree":true,"width":2,"hints":{"offChain":["check_eth_usd_price"],"onChainReads":["check_wallet_balance"],"onChainWrites":[],"contracts":[]}},{"layerIndex":1,"parallelTasks":["validate_transfer"],"executionMode":"sequential","conflictFree":true,"width":1,"hints":{"offChain":["validate_transfer"],"onChainReads":[],"onChainWrites":[],"contracts":[]}},{"layerIndex":2,"parallelTasks":["record_result"],"executionMode":"sequential","conflictFree":true,"width":1,"hints":{"offChain":[],"onChainReads":[],"onChainWrites":["record_result"],"contracts":[]}}],"layerGroups":[["check_eth_usd_price","check_wallet_balance"],["validate_transfer"],["record_result"]],"tasks":{"check_wallet_balance":{"type":"read","runner":"native_balance","depends_on":[],"output_key":"balance"},"check_eth_usd_price":{"type":"oracle_offchain","runner":"pyth_price","provider":"pyth_hermes","feed_alias":"ETH/USD","feed_id":"0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace","depends_on":[],"output_key":"eth_usd"},"validate_transfer":{"type":"compute","runner":"aggregate","depends_on":["check_wallet_balance","check_eth_usd_price"],"output_key":"validated"},"record_result":{"type":"contract_call","runner":"simulated","depends_on":["validate_transfer"],"output_key":"result"}}}

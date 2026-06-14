@@ -1,47 +1,42 @@
 {
   "network": "local",
   "registry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-  "executionId": "0xa6ebca86ab5176d43c47b95388eff986cc83be82c2d922d596529abb172152e2",
-  "dagHash": "0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47",
+  "executionId": "0xe1669a1010007cd4f499625779b03923ddc40144e391afcb42345fc6cae5c2c2",
+  "dagHash": "0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91",
   "layerHashes": [
-    "0x6394386d1169d15c3961bc1fe246cf23dad1cb51e0e71a3092b90ec57cc826d6",
-    "0xf76baf8704a14d121db92b50895d423d756be9a4bbe78ccf4c23da975715c380",
-    "0x6bf130bdcd3c0fbae94f4c53aeeb8c396fcbd8691b00115cb070a351b1b1c356",
-    "0x52d5c4cf80d9b2793526edafe9edb3a48eb2941f4b12737480fbdb2463e86607"
+    "0x64c02d86915c2ce5e57158a25f7fb03940add679f454a909d623c1e5caa27cf5",
+    "0xdeb4fb7a7d1934ee0cbb9f44075e6a0d2accd5d643060f4c98c80f3c305fde85",
+    "0xa4462be9010026999c79ebbbf7a87d8a16366252a565c7c177d54baebf302054"
   ],
-  "resultHash": "0x9268bc834e48fd9269366c4b2bdd0504055a49c7bf0289dba0d2a7f71d6a6808",
-  "layer0Hash": "0x6394386d1169d15c3961bc1fe246cf23dad1cb51e0e71a3092b90ec57cc826d6",
+  "layer0Hash": "0x64c02d86915c2ce5e57158a25f7fb03940add679f454a909d623c1e5caa27cf5",
+  "resultHash": "0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b",
   "saliMetrics": {
     "layer0Parallel": true,
-    "layer0Width": 3,
-    "layer0BatchMs": 793
+    "layer0Width": 2,
+    "layer0BatchMs": 469
   },
   "layerTimings": [
     {
       "layerIndex": 0,
       "timings": [
         {
-          "taskId": "check_recipient_kyc",
-          "startedAt": 1781294145553,
-          "finishedAt": 1781294145554,
-          "durationMs": 1
-        },
-        {
           "taskId": "check_wallet_balance",
-          "startedAt": 1781294145554,
-          "finishedAt": 1781294145579,
-          "durationMs": 25
+          "startedAt": 1781302391558,
+          "finishedAt": 1781302391596,
+          "durationMs": 38,
+          "runner": "native_balance"
         },
         {
           "taskId": "check_eth_usd_price",
-          "startedAt": 1781294145469,
-          "finishedAt": 1781294146262,
-          "durationMs": 793
+          "startedAt": 1781302391489,
+          "finishedAt": 1781302391958,
+          "durationMs": 469,
+          "runner": "pyth_price"
         },
         {
           "batch": true,
           "layerIndex": 0,
-          "batchDurationMs": 793
+          "batchDurationMs": 469
         }
       ]
     },
@@ -50,9 +45,10 @@
       "timings": [
         {
           "taskId": "validate_transfer",
-          "startedAt": 1781294146262,
-          "finishedAt": 1781294146262,
-          "durationMs": 0
+          "startedAt": 1781302391958,
+          "finishedAt": 1781302391958,
+          "durationMs": 0,
+          "runner": "aggregate"
         }
       ]
     },
@@ -60,28 +56,23 @@
       "layerIndex": 2,
       "timings": [
         {
-          "taskId": "execute_payment",
-          "startedAt": 1781294146262,
-          "finishedAt": 1781294146267,
-          "durationMs": 5
-        }
-      ]
-    },
-    {
-      "layerIndex": 3,
-      "timings": [
-        {
-          "taskId": "post_receipt",
-          "startedAt": 1781294146267,
-          "finishedAt": 1781294146268,
-          "durationMs": 1
+          "taskId": "record_result",
+          "startedAt": 1781302391958,
+          "finishedAt": 1781302391962,
+          "durationMs": 4,
+          "runner": "simulated"
         }
       ]
     }
   ],
-  "registerTx": "0x566f6f5bec25b4a953535acd16e12ac01e564fee57e682a26afd63fd2e9e86ab",
-  "finalizeTx": "0xf9bb60a58c169d289f56f71ad3c2a837619c2ffe2d77fe61490919cda7b89741",
-  "getExecution": "(0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47, 0x9268bc834e48fd9269366c4b2bdd0504055a49c7bf0289dba0d2a7f71d6a6808, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 9, 4, 4, true, false)",
+  "registerTx": "0x01c8c2d95eea453a4277a5651fa2b223c58037e68a40a5f6d5a360a18d2317c1",
+  "finalizeTx": "0x2af1a257929d34f1be1d97cca4355b845d4e96cf91929923f0c08fc9c5b2418a",
+  "getExecution": "(0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91, 0x33289f3e25c85c6309cc388e59c8f2550cfb1fdd0768cbf626d83155a929cb2b, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266, 2, 8, 3, 3, true, false)",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "verifierAddresses": {
+    "verifierB": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "verifierC": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+  },
   "verificationScoreB": "1",
   "verificationScoreC": "1"
 }
