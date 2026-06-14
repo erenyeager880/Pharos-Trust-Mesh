@@ -8,6 +8,55 @@
 
 ---
 
+## Shared environment and registry validation
+
+Set once before any command in this file:
+
+```bash
+export RPC=https://atlantic.dplabs-internal.com    # assets/networks.json → atlantic.rpcUrl
+export EXPLORER=https://atlantic.pharosscan.xyz
+export PRIVATE_KEY=0x...                           # executor / submitter key
+# Atlantic DAGRegistry — from deployments/atlantic.json → DAGRegistry.address
+export REGISTRY=0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2
+```
+
+Local Anvil (`--network local`) uses a freshly deployed registry (default `0x5FbDB2315678afecb367f032d93F642f64180aa3`). **Never use the Anvil address on Atlantic** — transactions will succeed against the wrong contract with no error.
+
+**Validate `$REGISTRY` before every write:**
+
+```bash
+RESULT=$(cast call $REGISTRY "requiredApprovals()(uint16)" --rpc-url $RPC 2>&1)
+echo "$RESULT" | grep -qE '^[0-9]+$' || { echo "REGISTRY not found or wrong network"; exit 1; }
+```
+
+**Terminal-state pre-check** (required before `completeLayer`, `approveExecution`, `finalizeExecution`, and `failExecution` when `$EXECUTION_ID` is already set):
+
+```bash
+STATE=$(cast call $REGISTRY \
+  "getExecution(bytes32)((bytes32,bytes32,address,uint256,uint256,uint16,uint16,bool,bool))" \
+  $EXECUTION_ID --rpc-url $RPC)
+# Tuple fields (0-indexed): 5=totalLayers, 6=completedLayers, 7=completed, 8=failed
+# Abort if completed==true or failed==true unless you intend a terminal read-only query.
+echo "$STATE"
+```
+
+Explorer tx link: `$EXPLORER/tx/<transactionHash>`
+
+### Event topic0 hashes (indexed log filtering)
+
+| Event | topic0 (`cast keccak "<signature>"`) |
+|-------|--------------------------------------|
+| `ExecutionRegistered(bytes32,bytes32,address,uint16)` | `0x8166bb75f747b87b590b2d1e79be2ea0658c51a25f74a1eeac1fa4f2765f65bc` |
+| `LayerCompleted(bytes32,uint16,bytes32)` | `0x392257d0cc9c00491d57ead8c794828942d16b685529b6672d03a63de799c6ec` |
+| `ExecutionApproved(bytes32,address)` | `0xbb969c206831a5429b009ea44845d2a6e033b04f88d67bdf2e203dcf4152993f` |
+| `ExecutionFinalized(bytes32,bytes32)` | `0x2f891a3973d8185f684a7c6461505e16f58de43df7761ca73d2ae41ff49b05ff` |
+| `ExecutionFailed(bytes32)` | `0xabfd711ecdd15ae3a6b3ad16ff2e9d81aec026a39d16725ee164be4fbf857a7c` |
+| `CanonicalDagPublished(bytes32,string)` | `0x6af2f393bb1cf443ffe80177eb10cf72c7ccfb3381c86014283dfab835b01501` |
+
+Indexed topics: `ExecutionRegistered` → topic1=`executionId`, topic2=`dagHash`, topic3=`submitter`. `LayerCompleted` → topic1=`executionId`. Filter with `--topic1 $EXECUTION_ID`.
+
+---
+
 ## compile-dag
 
 ### Overview
@@ -61,6 +110,14 @@ node assets/dag-executor/compile-dag.js --catalog payment
 2. Save `hashSpec` — it defines which fields each task type must include when computing task output hashes.
 3. For payment DAG, expect `dagHash` `0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91` and 3 layers.
 4. Use `layerPlan` to drive sequential `completeLayer` calls (index 0 … N−1).
+5. Capture compile output as shell variables (trailing JSON line is always machine-readable):
+
+```bash
+COMPILE_OUT=$(node assets/dag-executor/compile-dag.js --catalog payment | tail -1)
+DAG_HASH=$(node -e "const d=JSON.parse(process.argv[1]);process.stdout.write(d.dagHash)" "$COMPILE_OUT")
+TOTAL_LAYERS=$(node -e "const d=JSON.parse(process.argv[1]);process.stdout.write(String(d.layers))" "$COMPILE_OUT")
+echo "dagHash=$DAG_HASH layers=$TOTAL_LAYERS"
+```
 
 ---
 
@@ -284,11 +341,13 @@ Starts a new on-chain execution record for a compiled DAG. Returns `executionId`
 ### Command Template
 
 ```bash
-cast send $REGISTRY "registerExecution(bytes32,uint16)(bytes32)" \
+cast send $REGISTRY "registerExecution(bytes32,uint16)" \
   $DAG_HASH $TOTAL_LAYERS \
   --private-key $PRIVATE_KEY \
   --rpc-url $RPC
 ```
+
+`cast send` does not decode return data — obtain `executionId` from the `ExecutionRegistered` event (see Agent Guidelines).
 
 ### Parameters
 
@@ -304,11 +363,32 @@ cast send $REGISTRY "registerExecution(bytes32,uint16)(bytes32)" \
 
 | Field | Description |
 |-------|-------------|
-| `transactionHash` | Registration tx |
-| `ExecutionRegistered` event | Contains `executionId`, `dagHash`, `submitter`, `totalLayers` |
-| Return value | `executionId = keccak256(abi.encodePacked(dagHash, msg.sender, nonces[sender]++))` |
+| `transactionHash` | Registration tx — save as `$TX` |
+| `ExecutionRegistered` event | topic0 `0x8166bb75…`, topic1 = `executionId`, topic2 = `dagHash`, topic3 = `submitter`; data = `totalLayers` |
+| Return value | `executionId = keccak256(abi.encodePacked(dagHash, msg.sender, nonces[sender]++))` — **not** available from `cast send`; parse from logs |
 
-Parse event via `cast logs` or `cast receipt $TX --json`.
+Extract `executionId` from the receipt:
+
+```bash
+TX=$(cast send $REGISTRY "registerExecution(bytes32,uint16)" \
+  $DAG_HASH $TOTAL_LAYERS \
+  --private-key $PRIVATE_KEY \
+  --rpc-url $RPC \
+  --json | jq -r '.transactionHash')
+
+# topic1 of ExecutionRegistered = executionId (indexed)
+EXECUTION_ID=$(cast receipt $TX --rpc-url $RPC --json \
+  | jq -r '.logs[] | select(.topics[0] == "0x8166bb75f747b87b590b2d1e79be2ea0658c51a25f74a1eeac1fa4f2765f65bc") | .topics[1]')
+echo "executionId=$EXECUTION_ID"
+```
+
+Alternative (filter logs by registry address):
+
+```bash
+cast logs --from-block latest --address $REGISTRY \
+  "ExecutionRegistered(bytes32,bytes32,address,uint16)" \
+  --rpc-url $RPC | tail -1
+```
 
 ### Error Handling
 
@@ -320,11 +400,12 @@ Parse event via `cast logs` or `cast receipt $TX --json`.
 
 ### Agent Guidelines
 
+0. Validate `$REGISTRY` (see [Shared environment and registry validation](#shared-environment-and-registry-validation)).
 1. Complete Write Operation Pre-checks (see SKILL.md)
-2. Compile DAG first; use exact `dagHash` and `layers` as `$TOTAL_LAYERS`
-3. Execute `cast send registerExecution`
-4. Extract `executionId` from `ExecutionRegistered` event logs
-5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`
+2. Compile DAG first; assign `DAG_HASH` and `TOTAL_LAYERS` via the shell capture pattern in [compile-dag](#compile-dag)
+3. Execute `cast send registerExecution` (no return-type suffix on the signature)
+4. Extract `executionId` from `ExecutionRegistered` event topic1 (commands above)
+5. Show `$EXPLORER/tx/<transactionHash>`
 
 ---
 
@@ -374,11 +455,12 @@ Verify progress: `cast call $REGISTRY "getExecution(bytes32)((bytes32,bytes32,ad
 
 ### Agent Guidelines
 
+0. Validate `$REGISTRY` and run terminal-state pre-check on `$EXECUTION_ID` (see [Shared environment](#shared-environment-and-registry-validation)). Abort if `failed == true` or `completed == true`.
 1. Complete Write Operation Pre-checks (see SKILL.md)
 2. Compute `$LAYER_HASH` per layer using `hashSpec` and task output hashes (Pyth: use Hermes fields)
-3. Submit layers in order: 0, 1, … until `completedLayers == totalLayers`
+3. Submit layers in order: 0, 1, … until `completedLayers == totalLayers`. **Re-read `getExecution` after any external `failExecution`** — abort the loop if `failed` becomes true.
 4. Confirm each layer via `getExecution` or `layerHashes` mapping
-5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`
+5. Show `$EXPLORER/tx/<transactionHash>`
 
 ---
 
@@ -425,11 +507,19 @@ Check progress: `cast call $REGISTRY "approvalCount(bytes32)(uint16)" $EXECUTION
 
 ### Agent Guidelines
 
+0. Validate `$REGISTRY` and run terminal-state pre-check on `$EXECUTION_ID`. Abort if `failed == true` or `completed == true`.
 1. Complete Write Operation Pre-checks (see SKILL.md)
-2. Verifier independently recomputes layer hashes off-chain and compares to on-chain `layerHashes`
-3. Execute `approveExecution` only after hash verification passes
+2. For each layer index `0 … N−1`, independently verify evidence before approving:
+   - **Oracle tasks:** `node assets/dag-executor/fetch-pyth-hermes.js <SYMBOL>/USD` — use `feedId`, `price`, `conf`, `expo`, `publish_time` per `hashSpec`
+   - **Compute task hash** per [Task hash encodings](#task-hash-encodings-all-types) (must match `assets/dag-executor/hash-spec.js` exactly)
+   - **Layer hash:** sort task IDs alphabetically within the layer, then `hashLayer(index, [taskHash…])` via `assets/dag-executor/hash-spec.js`
+   - **Compare on-chain:** `cast call $REGISTRY "layerHashes(bytes32,uint16)(bytes32)" $EXECUTION_ID <index> --rpc-url $RPC`
+   - If any hash differs → **do not** call `approveExecution`; report mismatch
+3. Execute `approveExecution` only after all layer hashes match
 4. Ensure `approvalCount >= requiredApprovals` (2) before submitter finalizes
-5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`
+5. Show `$EXPLORER/tx/<transactionHash>`
+
+> **Security:** The contract does not prevent the submitter from approving with a wallet they also control. A submitter can satisfy the approval threshold using two distinct keys they own. For production trust guarantees, verifier wallets must be independently owned. `VERIFIER_B_PRIVATE_KEY` / `VERIFIER_C_PRIVATE_KEY` in `.env` do not enforce key independence — that is the operator's responsibility.
 
 ---
 
@@ -476,11 +566,24 @@ cast send $REGISTRY "finalizeExecution(bytes32,bytes32)" \
 
 ### Agent Guidelines
 
+0. Validate `$REGISTRY` and run terminal-state pre-check on `$EXECUTION_ID`. Abort if `failed == true` or `completed == true`.
 1. Complete Write Operation Pre-checks (see SKILL.md)
-2. Confirm all layers submitted and `approvalCount >= 2`
+2. Pre-finalize state check (all must pass before step 4):
+
+```bash
+STATE=$(cast call $REGISTRY \
+  "getExecution(bytes32)((bytes32,bytes32,address,uint256,uint256,uint16,uint16,bool,bool))" \
+  $EXECUTION_ID --rpc-url $RPC)
+# Verify: completedLayers (field 6) == totalLayers (field 5), completed (field 7) == false, failed (field 8) == false
+
+APPROVALS=$(cast call $REGISTRY "approvalCount(bytes32)(uint16)" $EXECUTION_ID --rpc-url $RPC)
+# Verify: APPROVALS >= 2 (or registry requiredApprovals)
+echo "state=$STATE approvals=$APPROVALS"
+```
+
 3. Compute `$RESULT_HASH` from final task output
-4. Execute `finalizeExecution` as submitter
-5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`
+4. Execute `finalizeExecution` as submitter only when step 2 passes
+5. Show `$EXPLORER/tx/<transactionHash>`
 
 ---
 
@@ -524,11 +627,12 @@ cast send $REGISTRY "failExecution(bytes32)" \
 
 ### Agent Guidelines
 
+0. Validate `$REGISTRY` and run terminal-state pre-check on `$EXECUTION_ID`. Abort if `completed == true` (already finalized).
 1. Complete Write Operation Pre-checks (see SKILL.md)
 2. Use when workflow cannot complete (oracle failure, task error, timeout)
 3. Execute `failExecution` as submitter
-4. Inform verifiers the execution is terminal — no approvals possible
-5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`
+4. Inform verifiers the execution is terminal — no further `completeLayer` or `approveExecution` calls possible
+5. Show `$EXPLORER/tx/<transactionHash>`
 
 ---
 
@@ -692,10 +796,10 @@ cast send $REGISTRY "approveExecution(bytes32)" \
 
 ### Agent Guidelines
 
-1. Verifier agent: independently fetch Pyth data and recompute all layer hashes
+1. Verifier agent: independently fetch Pyth data and recompute all layer hashes (see [approve-execution](#approve-execution) step 2)
 2. Compare each on-chain `layerHashes` entry against local computation
 3. Only approve when all submitted layers match and execution is not failed
-4. Coordinate two distinct verifier agents/wallets — submitter cannot self-approve twice
+4. Coordinate two **independently owned** verifier wallets — the same address cannot approve twice, but the submitter may approve from other keys they control (see security note in approve-execution)
 5. Confirm `approvalCount >= 2` before notifying submitter to finalize
 
 ---
@@ -783,11 +887,12 @@ cast send $REGISTRY "publishCanonicalDag(bytes32,string)" \
 
 ### Agent Guidelines
 
+0. Validate `$REGISTRY` (see [Shared environment](#shared-environment-and-registry-validation)).
 1. Complete Write Operation Pre-checks (see SKILL.md)
 2. Use catalog `dagHash` values — e.g. payment hash `0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91`
 3. Execute `publishCanonicalDag` once per canonical workflow
 4. Verify name via `cast call $REGISTRY "canonicalDagNames(bytes32)(string)" $DAG_HASH`
-5. Show `https://atlantic.pharosscan.xyz/tx/<transactionHash>`
+5. Show `$EXPLORER/tx/<transactionHash>`
 
 ---
 
@@ -806,6 +911,12 @@ cast logs --from-block 0 --address $REGISTRY \
   --rpc-url $RPC
 
 # Layer completions for a specific execution (filter topic1 = executionId)
+cast logs --from-block 0 --address $REGISTRY \
+  "LayerCompleted(bytes32,uint16,bytes32)" \
+  --topic1 $EXECUTION_ID \
+  --rpc-url $RPC
+
+# All LayerCompleted events (unfiltered — use only for registry-wide audit)
 cast logs --from-block 0 --address $REGISTRY \
   "LayerCompleted(bytes32,uint16,bytes32)" \
   --rpc-url $RPC
@@ -842,16 +953,18 @@ cast logs --from-block 0 --address $REGISTRY \
 
 ### Output Parsing
 
-| Event | Indexed Fields | Data |
-|-------|----------------|------|
-| `ExecutionRegistered` | `executionId`, `dagHash`, `submitter` | `totalLayers` |
-| `LayerCompleted` | `executionId` | `layerIndex`, `layerHash` |
-| `ExecutionApproved` | `executionId`, `approver` | — |
-| `ExecutionFinalized` | `executionId` | `resultHash` |
-| `ExecutionFailed` | `executionId` | — |
-| `CanonicalDagPublished` | `dagHash` | `name` |
+| Event | topic0 | Indexed topics | Data |
+|-------|--------|----------------|------|
+| `ExecutionRegistered` | `0x8166bb75f747b87b590b2d1e79be2ea0658c51a25f74a1eeac1fa4f2765f65bc` | topic1=`executionId`, topic2=`dagHash`, topic3=`submitter` | `totalLayers` |
+| `LayerCompleted` | `0x392257d0cc9c00491d57ead8c794828942d16b685529b6672d03a63de799c6ec` | topic1=`executionId` | `layerIndex`, `layerHash` |
+| `ExecutionApproved` | `0xbb969c206831a5429b009ea44845d2a6e033b04f88d67bdf2e203dcf4152993f` | topic1=`executionId`, topic2=`approver` | — |
+| `ExecutionFinalized` | `0x2f891a3973d8185f684a7c6461505e16f58de43df7761ca73d2ae41ff49b05ff` | topic1=`executionId` | `resultHash` |
+| `ExecutionFailed` | `0xabfd711ecdd15ae3a6b3ad16ff2e9d81aec026a39d16725ee164be4fbf857a7c` | topic1=`executionId` | — |
+| `CanonicalDagPublished` | `0x6af2f393bb1cf443ffe80177eb10cf72c7ccfb3381c86014283dfab835b01501` | topic1=`dagHash` | `name` |
 
-Use `--to-block`, `--from-block`, and topic filters to narrow results. Parse `executionId` from `ExecutionRegistered` when `cast send` return data is unavailable.
+Recompute any topic0: `cast keccak "EventName(types…)"`. When parsing raw `eth_getLogs` without Foundry, match `topics[0]` to topic0 and filter execution-scoped events with `topics[1] == $EXECUTION_ID`.
+
+Use `--to-block`, `--from-block`, and `--topic1` filters to narrow results. Parse `executionId` from `ExecutionRegistered` topic1 when `cast send` return data is unavailable (see [register-execution](#register-execution)).
 
 ### Error Handling
 
@@ -873,16 +986,19 @@ Use `--to-block`, `--from-block`, and topic filters to narrow results. Parse `ex
 
 ## Task hash encodings (all types)
 
-Canonical task output hashes (used in `hash-spec.js`):
+Canonical task output hashes (must match `assets/dag-executor/hash-spec.js` exactly):
 
 | Task type | Formula |
 |-----------|---------|
 | `oracle_offchain` / `pyth_hermes` | `keccak256(abi.encode(string taskId, bytes32 feedId, int64 price, uint64 conf, int32 expo, uint64 publishTime))` |
-| `read` | `keccak256(abi.encode(string taskId, address contract, bytes callResult))` |
+| `read` | `keccak256(abi.encode(string taskId, address contract, bytes callResult))` where `callResult` bytes are: raw `0x` hex if `callResult` is already hex-prefixed; otherwise `zeroPad32(uint256(callResult))` (see `hashReadTaskOutput` in `hash-spec.js`) |
+| `offchain_read` | `keccak256(abi.encode(string taskId, string url, bytes32 payloadHash))` |
+| `evidence` | `keccak256(abi.encode(string taskId, bytes32 contentHash))` |
+| `agent_work` | `keccak256(abi.encode(string taskId, string agentId, string role, bytes32 outputHash, uint64 timestamp))` |
 | `compute` | `keccak256(abi.encode(string taskId, bytes32 inputsHash))` where `inputsHash = keccak256(abi.encode(bytes32[] depHashes))` |
 | `contract_call` | `keccak256(abi.encode(string taskId, bytes32 txHash))` |
 
-**Layer hash:** `keccak256(abi.encode(uint16 layerIndex, bytes32[] taskOutputHashes))` — task hashes sorted alphabetically by `taskId` within the layer.
+**Layer hash:** `keccak256(abi.encode(uint16 layerIndex, bytes32[] taskOutputHashes))` — task hashes **sorted alphabetically by `taskId`** within each layer (see `compute-layer-hash.js`).
 
 ---
 

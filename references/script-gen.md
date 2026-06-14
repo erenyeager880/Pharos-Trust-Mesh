@@ -12,13 +12,33 @@ Generate a read-only script using ethers v6 that calls `eth_call` via RPC.
 
 ### Command Template
 
-Use `assets/templates/template_read.js.tpl` as base. Replace `<RPC_URL>`, `<CONTRACT>`, `<METHOD>`.
+Shipped template: `assets/templates/template_read.js.tpl`
+
+```bash
+# Copy template and replace placeholders:
+# {{RPC_URL}}  — from assets/networks.json → atlantic.rpcUrl
+# {{CONTRACT}} — target contract address
+# {{ABI_FRAGMENT}} — e.g. "function balanceOf(address) view returns (uint256)"
+# {{METHOD}}   — function name
+# {{ARGS}}     — call arguments (empty if none)
+```
+
+Minimal inline boilerplate (if not using the template file):
+
+```js
+const { ethers } = require("ethers");
+const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || "https://atlantic.dplabs-internal.com");
+const abi = ["function METHOD() view returns (uint256)"];
+const contract = new ethers.Contract("CONTRACT_ADDR", abi, provider);
+contract.METHOD().then(console.log);
+```
 
 ### Agent Guidelines
 
-1. Read RPC from `assets/networks.json`
-2. Use ethers `Contract` with minimal ABI fragment
-3. Log parsed return values
+1. Read RPC from `assets/networks.json` → `atlantic.rpcUrl`
+2. Prefer `assets/templates/template_read.js.tpl` when generating files
+3. Use ethers `Contract` with minimal ABI fragment
+4. Log parsed return values
 
 ---
 
@@ -30,9 +50,24 @@ Generate a write script that signs and sends transactions.
 
 ### Command Template
 
-Use `assets/templates/template_write.js.tpl`. Never hardcode private keys — read from `process.env.PRIVATE_KEY`.
+Shipped template: `assets/templates/template_write.js.tpl`
+
+Placeholders: `{{RPC_URL}}`, `{{CONTRACT}}`, `{{ABI_FRAGMENT}}`, `{{METHOD}}`, `{{ARGS}}`. Private key is read from `process.env.PRIVATE_KEY` (never hardcode).
+
+Minimal inline boilerplate:
+
+```js
+const { ethers } = require("ethers");
+if (!process.env.PRIVATE_KEY) throw new Error("Set PRIVATE_KEY");
+const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+const abi = ["function METHOD(uint256 arg)"];
+const contract = new ethers.Contract("CONTRACT_ADDR", abi, wallet);
+contract.METHOD(arg).then((tx) => tx.wait()).then((r) => console.log("tx:", r.hash));
+```
 
 ### Agent Guidelines
 
 1. Complete Write Operation Pre-checks before running generated write scripts
-2. Use explicit RPC URL from networks.json
+2. Use explicit RPC URL from `assets/networks.json`
+3. Never commit or log `PRIVATE_KEY`
