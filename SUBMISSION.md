@@ -25,12 +25,13 @@ npm install
 forge build && forge test
 ```
 
-Coverage includes registration, ordered layer completion, multi-agent approvals (`requiredApprovals = 2`), finalization, failure paths, canonical DAG publishing, and all documented revert strings. Captured output: `demo-output-forge-test.txt`.
+Coverage includes registration, ordered layer completion, multi-agent approvals (`requiredApprovals = 2`), submitter approval guard, finalization, failure paths, canonical DAG publishing, and all documented revert strings. Captured output: `demo-output-forge-test.txt`.
 
 **Integration verification** (off-chain evidence → on-chain anchors):
 
 ```bash
 npm run verify-execution demo-workflow-payment-local.json
+npm run verify-execution demo-workflow-payment-atlantic.json
 ```
 
 See [`references/testing.md`](references/testing.md) for the full matrix and CI checklist.
@@ -51,6 +52,7 @@ Atlantic (requires `PRIVATE_KEY` in `.env`; optional independent verifier keys a
 
 ```bash
 npm run demo:atlantic
+npm run verify-execution demo-workflow-payment-atlantic.json
 npm run verify-execution demo-sali-atlantic.json
 ```
 

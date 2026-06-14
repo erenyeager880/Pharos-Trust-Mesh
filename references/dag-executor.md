@@ -793,6 +793,7 @@ cast send $REGISTRY "approveExecution(bytes32)" \
 |-------|-------|-----|
 | Hash mismatch | Incorrect task outputs or Pyth fields | Recompute using `hashSpec`; reject approval |
 | `Already approved` | Same verifier re-approving | Use distinct verifier wallets |
+| `Submitter cannot approve` | Submitter attempted `approveExecution` | Use independent verifier wallets only |
 | `Cannot approve failed` | Execution failed | Abort verification |
 | `Insufficient approvals` at finalize | < 2 approvers | Collect remaining approvals |
 

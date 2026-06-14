@@ -4,10 +4,10 @@
 
 ```bash
 forge build && forge test
-# 32 passed — see demo-output-forge-test.txt
+# 33 passed — see demo-output-forge-test.txt
 ```
 
-Coverage: `registerExecution`, `completeLayer`, `approveExecution`, `finalizeExecution`, `failExecution`, `publishCanonicalDag`, view helpers, and all revert guards.
+Coverage: `registerExecution`, `completeLayer`, `approveExecution` (including `Submitter cannot approve`), `finalizeExecution`, `failExecution`, `publishCanonicalDag`, view helpers, and all revert guards.
 
 ## 1. Shipped workflows (real evidence)
 
@@ -50,12 +50,25 @@ npm run compose-dag -- --oracle BTC/USD --balance
 npm run workflow -- --dag assets/dag-executor/generated/custom.json --network local
 ```
 
+## 6. Atlantic (live DAGRegistry)
+
+Registry: `0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6` (see `deployments/atlantic.json`)
+
+```
+npm run demo:atlantic
+npm run verify-execution demo-workflow-payment-atlantic.json
+npm run verify-execution demo-sali-atlantic.json
+# Both: PASS
+```
+
 ## Commands
 
 ```bash
 forge build && forge test
 npm run demo:local
+npm run demo:atlantic
 npm run workflow -- --template oracle-validation --oracle BTC/USD --network local
 npm run workflow -- --template defi-market-signal --network local
 npm run verify-execution demo-workflow-payment-local.json
+npm run verify-execution demo-workflow-payment-atlantic.json
 ```

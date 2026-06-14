@@ -88,7 +88,7 @@ Local workflows (`--network local`) use Anvil test accounts and need no keys.
 ```bash
 npm install
 forge build
-forge test                    # 32 DAGRegistry unit tests
+forge test                    # 33 DAGRegistry unit tests
 node assets/dag-executor/fetch-pyth-hermes.js BTC/USD
 npm run demo:local
 npm run verify-execution demo-workflow-payment-local.json
@@ -135,7 +135,7 @@ SKILL.md                 Agent entry point
 references/              query, transaction, contract, dag-executor, dag-schema, testing
 assets/dag-executor/     Compiler, catalog, templates, Pyth helpers
 src/dag-executor/        DAGRegistry.sol (Foundry compile target)
-test/                    DAGRegistry.t.sol (32 Foundry tests)
+test/                    DAGRegistry.t.sol (33 Foundry tests)
 scripts/                 Workflow runner, demo scripts, verify-execution
 demo-workflow-*.json     Integration test artifacts (local + Atlantic)
 ```
