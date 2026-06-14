@@ -1,49 +1,44 @@
 {
   "network": "atlantic",
   "chainId": 688689,
-  "registry": "0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b",
-  "explorer": "https://atlantic.pharosscan.xyz/address/0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b",
-  "executionId": "0x1e0bbba4f958936798253944bfa962396f6c389bf551a1bf8006572d963d7a25",
-  "dagHash": "0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47",
+  "registry": "0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2",
+  "explorer": "https://atlantic.pharosscan.xyz/address/0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2",
+  "executionId": "0x1d13bee1794b776b8db8685d28e4764a42266550b7ec7039566b9e7f3b3a67f3",
+  "dagHash": "0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91",
   "layerHashes": [
-    "0xe39e92dbd92b89812f35cd64a565a89c09ada8e2f80c0aab16558229c0304aa2",
-    "0xd5e46261f733501f24145f7a200c9d2bf6a1237784ea9a6d6600c22cd6897f63",
-    "0x1e416876d9fe81316fc0fe7514f6abce9b622840a12533aef49a0d409930181f",
-    "0x3ea45b96ea86588e854d806cde555b17ecdf1792bb3bdc5c354cb7af2fd6548a"
+    "0x2bfd9a2e6a497dfeca70cba27a562415e757219c3f242de19563f399d6966e4b",
+    "0x05d9d17c979ffa02d372ab5045a9c96812adaeea264d5d6448b00c3188565f50",
+    "0x1f95c6fca70422a350c60ec475dd0fa186d41a3fa3161b90508ed285028ba5a0"
   ],
-  "layer0Hash": "0xe39e92dbd92b89812f35cd64a565a89c09ada8e2f80c0aab16558229c0304aa2",
-  "resultHash": "0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c",
+  "layer0Hash": "0x2bfd9a2e6a497dfeca70cba27a562415e757219c3f242de19563f399d6966e4b",
+  "resultHash": "0x409ce1463a50b9706bf4bfbf6f55c09e47d5ad16dd781db14a447222bb4722cb",
   "saliMetrics": {
     "layer0Parallel": true,
-    "layer0Width": 3,
-    "layer0BatchMs": 631
+    "layer0Width": 2,
+    "layer0BatchMs": 777
   },
   "layerTimings": [
     {
       "layerIndex": 0,
       "timings": [
         {
-          "taskId": "check_recipient_kyc",
-          "startedAt": 1781294172703,
-          "finishedAt": 1781294172703,
-          "durationMs": 0
-        },
-        {
           "taskId": "check_wallet_balance",
-          "startedAt": 1781294172703,
-          "finishedAt": 1781294173239,
-          "durationMs": 536
+          "startedAt": 1781461510282,
+          "finishedAt": 1781461510464,
+          "durationMs": 182,
+          "runner": "native_balance"
         },
         {
           "taskId": "check_eth_usd_price",
-          "startedAt": 1781294172637,
-          "finishedAt": 1781294173267,
-          "durationMs": 631
+          "startedAt": 1781461510282,
+          "finishedAt": 1781461511059,
+          "durationMs": 777,
+          "runner": "pyth_price"
         },
         {
           "batch": true,
           "layerIndex": 0,
-          "batchDurationMs": 631
+          "batchDurationMs": 777
         }
       ]
     },
@@ -52,9 +47,10 @@
       "timings": [
         {
           "taskId": "validate_transfer",
-          "startedAt": 1781294173267,
-          "finishedAt": 1781294173267,
-          "durationMs": 0
+          "startedAt": 1781461511059,
+          "finishedAt": 1781461511059,
+          "durationMs": 0,
+          "runner": "aggregate"
         }
       ]
     },
@@ -62,31 +58,26 @@
       "layerIndex": 2,
       "timings": [
         {
-          "taskId": "execute_payment",
-          "startedAt": 1781294173267,
-          "finishedAt": 1781294173273,
-          "durationMs": 6
-        }
-      ]
-    },
-    {
-      "layerIndex": 3,
-      "timings": [
-        {
-          "taskId": "post_receipt",
-          "startedAt": 1781294173273,
-          "finishedAt": 1781294173274,
-          "durationMs": 1
+          "taskId": "record_result",
+          "startedAt": 1781461511059,
+          "finishedAt": 1781461511063,
+          "durationMs": 4,
+          "runner": "simulated"
         }
       ]
     }
   ],
-  "registerTx": "0x327dba11a9b4c730a34e20fe7653746b92ef70b716bc0fe9c37826f7a27588a8",
-  "finalizeTx": "0xd8183c861abee31dd9c4b5562d8e8e77eafb03b8983278daee2831da6c06dcb6",
-  "registerTxUrl": "https://atlantic.pharosscan.xyz/tx/0x327dba11a9b4c730a34e20fe7653746b92ef70b716bc0fe9c37826f7a27588a8",
-  "finalizeTxUrl": "https://atlantic.pharosscan.xyz/tx/0xd8183c861abee31dd9c4b5562d8e8e77eafb03b8983278daee2831da6c06dcb6",
-  "getExecution": "(0xe5d1ac18c691012d23aba045c2605a7e7c4b9570061d6c7fe44a8a7d43dfff47, 0xd394796f31bd808b0ce0417bfe08a5434cf544111848324f79852e32b6a1b41c, 0xb8664841528e9Bd60D91AbB1bCF2975e67Fa0e17, 24054480 [2.405e7], 24054512 [2.405e7], 4, 4, true, false)",
-  "verificationScoreB": "2",
-  "verificationScoreC": "2",
-  "completedAt": "2026-06-12T19:56:59.415Z"
+  "registerTx": "0xe82bbbe52738ef0994ac071654b00938ff64596343ac333e8ac922f1a941b22d",
+  "finalizeTx": "0x7d2643feadc93470ad4cb5f2d19143c3c380b4443167d0367a8960adea88f9d9",
+  "registerTxUrl": "https://atlantic.pharosscan.xyz/tx/0xe82bbbe52738ef0994ac071654b00938ff64596343ac333e8ac922f1a941b22d",
+  "finalizeTxUrl": "https://atlantic.pharosscan.xyz/tx/0x7d2643feadc93470ad4cb5f2d19143c3c380b4443167d0367a8960adea88f9d9",
+  "getExecution": "(0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91, 0x409ce1463a50b9706bf4bfbf6f55c09e47d5ad16dd781db14a447222bb4722cb, 0xE2b3B061Bb750676A09c91245faf1Ec708D78c92, 24195566 [2.419e7], 24195595 [2.419e7], 3, 3, true, false)",
+  "deployer": "0xE2b3B061Bb750676A09c91245faf1Ec708D78c92",
+  "verifierAddresses": {
+    "verifierB": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "verifierC": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+  },
+  "verificationScoreB": "1",
+  "verificationScoreC": "1",
+  "completedAt": "2026-06-14T00:00:00.000Z"
 }

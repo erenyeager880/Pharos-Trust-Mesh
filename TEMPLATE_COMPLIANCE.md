@@ -10,4 +10,4 @@
 - [x] `forge build` / `forge test` — 32 tests pass (`test/DAGRegistry.t.sol`; see `references/testing.md`)
 - [x] Lifecycle demo captured in `demo-output.txt` (local Anvil)
 - [x] `references/testing.md` — test commands, coverage matrix, CI checklist
-- [x] Atlantic deploy — `0x4bC63A4350522074A174Fd1344b51cd00Cb95e7b` (verified on PharosScan)
+- [x] Atlantic deploy — `0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2` (verified on PharosScan; deployer `0xE2b3B061Bb750676A09c91245faf1Ec708D78c92`)
