@@ -12,15 +12,21 @@ Generate a read-only script using ethers v6 that calls `eth_call` via RPC.
 
 ### Command Template
 
-Shipped template: `assets/templates/template_read.js.tpl`
+Shipped templates (present in repo):
 
-```bash
-# Copy template and replace placeholders:
-# {{RPC_URL}}  — from assets/networks.json → atlantic.rpcUrl
-# {{CONTRACT}} — target contract address
-# {{ABI_FRAGMENT}} — e.g. "function balanceOf(address) view returns (uint256)"
-# {{METHOD}}   — function name
-# {{ARGS}}     — call arguments (empty if none)
+| File | Purpose |
+|------|---------|
+| `assets/templates/template_read.js.tpl` | Read-only ethers v6 script |
+| `assets/templates/template_write.js.tpl` | Write script (`process.env.PRIVATE_KEY`) |
+
+Replace placeholders when generating scripts:
+
+```text
+{{RPC_URL}}  — from assets/networks.json → atlantic.rpcUrl
+{{CONTRACT}} — target contract address
+{{ABI_FRAGMENT}} — e.g. "function balanceOf(address) view returns (uint256)"
+{{METHOD}}   — function name
+{{ARGS}}     — call arguments (empty if none)
 ```
 
 Minimal inline boilerplate (if not using the template file):
@@ -50,7 +56,7 @@ Generate a write script that signs and sends transactions.
 
 ### Command Template
 
-Shipped template: `assets/templates/template_write.js.tpl`
+Shipped template: `assets/templates/template_write.js.tpl` (see table in Read Script Pattern).
 
 Placeholders: `{{RPC_URL}}`, `{{CONTRACT}}`, `{{ABI_FRAGMENT}}`, `{{METHOD}}`, `{{ARGS}}`. Private key is read from `process.env.PRIVATE_KEY` (never hardcode).
 

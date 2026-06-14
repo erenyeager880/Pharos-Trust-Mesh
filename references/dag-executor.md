@@ -17,7 +17,7 @@ export RPC=https://atlantic.dplabs-internal.com    # assets/networks.json → at
 export EXPLORER=https://atlantic.pharosscan.xyz
 export PRIVATE_KEY=0x...                           # executor / submitter key
 # Atlantic DAGRegistry — from deployments/atlantic.json → DAGRegistry.address
-export REGISTRY=0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2
+export REGISTRY=0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6
 ```
 
 Local Anvil (`--network local`) uses a freshly deployed registry (default `0x5FbDB2315678afecb367f032d93F642f64180aa3`). **Never use the Anvil address on Atlantic** — transactions will succeed against the wrong contract with no error.
@@ -377,8 +377,9 @@ TX=$(cast send $REGISTRY "registerExecution(bytes32,uint16)" \
   --json | jq -r '.transactionHash')
 
 # topic1 of ExecutionRegistered = executionId (indexed)
+TOPIC0=0x8166bb75f747b87b590b2d1e79be2ea0658c51a25f74a1eeac1fa4f2765f65bc
 EXECUTION_ID=$(cast receipt $TX --rpc-url $RPC --json \
-  | jq -r '.logs[] | select(.topics[0] == "0x8166bb75f747b87b590b2d1e79be2ea0658c51a25f74a1eeac1fa4f2765f65bc") | .topics[1]')
+  | jq -r --arg t0 "$TOPIC0" '.logs[] | select(.topics[0] == $t0) | .topics[1]')
 echo "executionId=$EXECUTION_ID"
 ```
 
@@ -503,6 +504,7 @@ Check progress: `cast call $REGISTRY "approvalCount(bytes32)(uint16)" $EXECUTION
 | `Execution not found` | Bad execution ID | Verify ID from registration event |
 | `Already completed` | Execution finalized | Approvals no longer accepted |
 | `Cannot approve failed` | Execution was failed | Cannot approve failed runs |
+| `Submitter cannot approve` | Submitter called `approveExecution` | Use independent verifier wallets |
 | `Already approved` | Same verifier twice | Each address approves at most once |
 
 ### Agent Guidelines
@@ -519,7 +521,7 @@ Check progress: `cast call $REGISTRY "approvalCount(bytes32)(uint16)" $EXECUTION
 4. Ensure `approvalCount >= requiredApprovals` (2) before submitter finalizes
 5. Show `$EXPLORER/tx/<transactionHash>`
 
-> **Security:** The contract does not prevent the submitter from approving with a wallet they also control. A submitter can satisfy the approval threshold using two distinct keys they own. For production trust guarantees, verifier wallets must be independently owned. `VERIFIER_B_PRIVATE_KEY` / `VERIFIER_C_PRIVATE_KEY` in `.env` do not enforce key independence — that is the operator's responsibility.
+The contract enforces `msg.sender != submitter` on `approveExecution` — verifiers must use wallets distinct from the executor.
 
 ---
 
@@ -799,7 +801,7 @@ cast send $REGISTRY "approveExecution(bytes32)" \
 1. Verifier agent: independently fetch Pyth data and recompute all layer hashes (see [approve-execution](#approve-execution) step 2)
 2. Compare each on-chain `layerHashes` entry against local computation
 3. Only approve when all submitted layers match and execution is not failed
-4. Coordinate two **independently owned** verifier wallets — the same address cannot approve twice, but the submitter may approve from other keys they control (see security note in approve-execution)
+4. Coordinate two **independently owned** verifier wallets (submitter cannot call `approveExecution` on their own execution)
 5. Confirm `approvalCount >= 2` before notifying submitter to finalize
 
 ---
@@ -1110,6 +1112,6 @@ forge test --match-test finalize
 ### Agent Guidelines
 
 1. Run `forge test` after any change to `src/dag-executor/DAGRegistry.sol` or `test/DAGRegistry.t.sol`.
-2. Expect **32 tests** in `test/DAGRegistry.t.sol` (captured in `demo-output-forge-test.txt`).
+2. Expect **33 tests** in `test/DAGRegistry.t.sol` (captured in `demo-output-forge-test.txt`).
 3. If a revert string changes in the contract, update error tables in this file **and** tests in `DAGRegistry.t.sol`.
 4. Full coverage matrix: → [`references/testing.md`](testing.md).

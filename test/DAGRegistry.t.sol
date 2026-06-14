@@ -102,6 +102,14 @@ contract DAGRegistryTest is Test {
         assertEq(registry.verificationScore(executor), 0);
     }
 
+    function test_approveExecution_revertsSubmitter() public {
+        bytes32 id = _register(executor, 1);
+
+        vm.prank(executor);
+        vm.expectRevert("Submitter cannot approve");
+        registry.approveExecution(id);
+    }
+
     function test_approveExecution_revertsDuplicate() public {
         bytes32 id = _register(executor, 1);
         vm.prank(verifierB);

@@ -10,7 +10,7 @@ Do not attempt operations outside this skill package without explicit user appro
 
 ## Prerequisites
 
-1. **Foundry** — `cast` and `forge` must be installed (`forge --version`, `cast --version`). Run `forge test` (32 tests) before Atlantic writes — see `references/testing.md`.
+1. **Foundry** — `cast` and `forge` must be installed (`forge --version`, `cast --version`). Run `forge test` (33 tests) before Atlantic writes — see `references/testing.md`.
 2. **Node.js** — for `compile-dag.js` and `fetch-pyth-hermes.js` (`node --version`).
 3. **Wallet** — export private key: `export PRIVATE_KEY=0x...`
 4. **Convenience vars:**

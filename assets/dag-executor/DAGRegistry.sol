@@ -82,6 +82,7 @@ contract DAGRegistry {
         require(rec.submitter != address(0), "Execution not found");
         require(!rec.completed, "Already completed");
         require(!rec.failed, "Cannot approve failed");
+        require(msg.sender != rec.submitter, "Submitter cannot approve");
         require(!hasApproved[executionId][msg.sender], "Already approved");
 
         hasApproved[executionId][msg.sender] = true;

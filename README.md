@@ -116,7 +116,7 @@ Full guide: [`references/testing.md`](references/testing.md). Captured outputs: 
 
 ## Live deployment
 
-**Atlantic DAGRegistry:** [`0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2`](https://atlantic.pharosscan.xyz/address/0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2) (verified). Full Atlantic metadata: `deployments/atlantic.json`.
+**Atlantic DAGRegistry:** [`0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6`](https://atlantic.pharosscan.xyz/address/0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6) (verified). Full Atlantic metadata: `deployments/atlantic.json`.
 
 ## Documentation map
 

@@ -14,11 +14,11 @@
 
 ## Live contract (Atlantic)
 
-- **DAGRegistry:** [0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2](https://atlantic.pharosscan.xyz/address/0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2) (verified). Details: `deployments/atlantic.json`
+- **DAGRegistry:** [0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6](https://atlantic.pharosscan.xyz/address/0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6) (verified). Details: `deployments/atlantic.json`
 
 ## Test suite
 
-**32 Foundry unit tests** in `test/DAGRegistry.t.sol` cover the full `DAGRegistry` lifecycle:
+**33 Foundry unit tests** in `test/DAGRegistry.t.sol` cover the full `DAGRegistry` lifecycle:
 
 ```bash
 npm install

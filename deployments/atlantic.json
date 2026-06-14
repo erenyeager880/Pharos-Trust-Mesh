@@ -5,26 +5,26 @@
   "explorerUrl": "https://atlantic.pharosscan.xyz",
   "deployer": "0xE2b3B061Bb750676A09c91245faf1Ec708D78c92",
   "DAGRegistry": {
-    "address": "0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2",
+    "address": "0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6",
     "requiredApprovals": 2,
-    "deployTx": "0x27d66e80be60757e49971b88fa624298d529237b342568d5e21d9e992e9150be",
+    "deployTx": "0x62bd957e672fbddd5524965f88a1b2ad0c2382000df98a3b68f3861f6e6b3823",
     "verified": true,
-    "explorer": "https://atlantic.pharosscan.xyz/address/0x14Ae8fcfD157ddfaEdC7c03A24363EA63619EEA2"
+    "explorer": "https://atlantic.pharosscan.xyz/address/0xB825EAe9BA48B44374be0DD56EE701A0dF2A24E6"
   },
   "demoExecution": {
     "executionId": "0x1d13bee1794b776b8db8685d28e4764a42266550b7ec7039566b9e7f3b3a67f3",
     "dagHash": "0xbe898bd57dac5a3cfc6628951dfa811396c023bf396a28cb73a49a6c6c866e91",
     "resultHash": "0x409ce1463a50b9706bf4bfbf6f55c09e47d5ad16dd781db14a447222bb4722cb",
-    "registerTx": "0xe82bbbe52738ef0994ac071654b00938ff64596343ac333e8ac922f1a941b22d",
-    "finalizeTx": "0x7d2643feadc93470ad4cb5f2d19143c3c380b4443167d0367a8960adea88f9d9",
+    "registerTx": "0x86239cce949756ab7d58baa601a371ceae4779c20fc6f8ad568ce12d5a7e0ebc",
+    "finalizeTx": "0x00c23044dc262630b8ebb2aa273d83235fb3135c222ba6d79caa60617f9550f4",
     "completed": true
   },
   "saliDemoExecution": {
     "executionId": "0x1d13bee1794b776b8db8685d28e4764a42266550b7ec7039566b9e7f3b3a67f3",
-    "layer0Hash": "0x2bfd9a2e6a497dfeca70cba27a562415e757219c3f242de19563f399d6966e4b",
+    "layer0Hash": "0x8d933989b3722d7e099cd14a425e7e00002ed721e541af8dfe307a64da2a0698",
     "resultHash": "0x409ce1463a50b9706bf4bfbf6f55c09e47d5ad16dd781db14a447222bb4722cb",
-    "registerTx": "0xe82bbbe52738ef0994ac071654b00938ff64596343ac333e8ac922f1a941b22d",
-    "finalizeTx": "0x7d2643feadc93470ad4cb5f2d19143c3c380b4443167d0367a8960adea88f9d9",
+    "registerTx": "0x86239cce949756ab7d58baa601a371ceae4779c20fc6f8ad568ce12d5a7e0ebc",
+    "finalizeTx": "0x00c23044dc262630b8ebb2aa273d83235fb3135c222ba6d79caa60617f9550f4",
     "completed": true,
     "saliLayer0Parallel": true
   }

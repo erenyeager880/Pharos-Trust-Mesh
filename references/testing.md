@@ -34,13 +34,13 @@ forge test --match-test finalize   # filter by name
 - Tests: `test/DAGRegistry.t.sol`
 - Captured output: `demo-output-forge-test.txt`
 
-### Coverage (32 tests)
+### Coverage (33 tests)
 
 | Area | What is tested |
 |------|----------------|
 | `registerExecution` | Success path, zero-layer revert, unique IDs via nonce |
 | `completeLayer` | Hash storage, ordering, zero hash, wrong submitter, not found, completed/failed guards |
-| `approveExecution` | Success, duplicate revert, not found, completed guard, failed guard, `verificationScore` |
+| `approveExecution` | Success, duplicate revert, not found, completed guard, failed guard, submitter guard, `verificationScore` |
 | `finalizeExecution` | Full happy path with 2 approvals, insufficient approvals, incomplete layers, wrong submitter, not found, already completed, `endBlock` |
 | `failExecution` | Blocks approve/finalize, wrong submitter, duplicate fail, not found, already completed, `endBlock` |
 | `publishCanonicalDag` | Name storage, duplicate publish revert |
@@ -62,6 +62,7 @@ These strings must stay in sync with `references/dag-executor.md` error tables:
 | `Zero layer hash` | `completeLayer` |
 | `Layer out of order` | `completeLayer` |
 | `Cannot approve failed` | `approveExecution` |
+| `Submitter cannot approve` | `approveExecution` |
 | `Already approved` | `approveExecution` |
 | `Layers incomplete` | `finalizeExecution` |
 | `Insufficient approvals` | `finalizeExecution` |
