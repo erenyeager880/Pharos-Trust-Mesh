@@ -115,9 +115,10 @@ See [`dag-executor.md#verify-execution`](dag-executor.md#verify-execution) for a
 The repository includes [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), which runs on every push and pull request:
 
 1. `npm ci`
-2. `forge build`
+2. `forge build && forge test`
+3. `npm run demo:local && npm run verify-execution demo-workflow-payment-local.json`
 
-Run `forge test` and the local demo locally before submitting (see checklist below). Badge in README links to the workflow run history.
+Badge in README links to the workflow run history.
 
 ---
 
