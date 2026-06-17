@@ -26,9 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Foundry dependencies
-        run: forge install foundry-rs/forge-std --no-commit
-
       - name: Build and test contracts
         run: forge build && forge test
 
