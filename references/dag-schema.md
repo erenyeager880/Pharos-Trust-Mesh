@@ -1,4 +1,4 @@
-# DAG Schema — Agent Authoring Guide
+# DAG Schema  -  Agent Authoring Guide
 
 Agents compose multi-agent workflows as JSON DAGs. The compiler produces `saliPlan`, `hashSpec`, and `dagHash`. The executor runs tasks by **type + runner**, not by hardcoded task names.
 
@@ -7,7 +7,7 @@ Agents compose multi-agent workflows as JSON DAGs. The compiler produces `saliPl
 | dagId | real evidence | example prompt |
 |-------|---------------|----------------|
 | `payment` | PHRS balance + Pyth ETH/USD | "Verify balance and price before payment" |
-| `oracle-validation` | N× Pyth price fetches + consensus | "Three agents fetch BTC/USD and compare hashes" |
+| `oracle-validation` | Nx Pyth price fetches + consensus | "Three agents fetch BTC/USD and compare hashes" |
 | `defi-market-signal` | Pyth BTC/USD + Binance funding/book JSON | "Market signal from price, funding, liquidity" |
 | `wallet-risk-snapshot` | PHRS native balance on RPC | "Snapshot wallet balance for risk evidence" |
 | `research-url-verification` | Real URL fetches + content hashes | "Verify multiple source URLs by hash" |
@@ -38,11 +38,11 @@ Custom DAGs via `--dag <path>` may use additional runners in `task-runners.js` (
 
 `resolveFeedId` accepts raw `0x` feed IDs, aliases (`ETH/USD`, `BTC/USD`, `DOGE/USD`, `SOL/USD`), and short forms (`BTC`, `doge/usd`).
 
-PHRS has no Pyth feed — use `native_balance` for on-chain PHRS evidence.
+PHRS has no Pyth feed  -  use `native_balance` for on-chain PHRS evidence.
 
 ## Agent workflow
 
-1. Map user prompt → catalog or template
+1. Map user prompt -> catalog or template
 2. `compose-dag` or write JSON
 3. `npm run workflow -- --template <id>` or `--catalog payment`
 4. `npm run verify-execution demo-workflow-<dagId>-local.json`

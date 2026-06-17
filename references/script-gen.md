@@ -22,11 +22,11 @@ Shipped templates (present in repo):
 Replace placeholders when generating scripts:
 
 ```text
-{{RPC_URL}}  — from assets/networks.json → atlantic.rpcUrl
-{{CONTRACT}} — target contract address
-{{ABI_FRAGMENT}} — e.g. "function balanceOf(address) view returns (uint256)"
-{{METHOD}}   — function name
-{{ARGS}}     — call arguments (empty if none)
+{{RPC_URL}}   -  from assets/networks.json -> atlantic.rpcUrl
+{{CONTRACT}}  -  target contract address
+{{ABI_FRAGMENT}}  -  e.g. "function balanceOf(address) view returns (uint256)"
+{{METHOD}}    -  function name
+{{ARGS}}      -  call arguments (empty if none)
 ```
 
 Minimal inline boilerplate (if not using the template file):
@@ -41,7 +41,7 @@ contract.METHOD().then(console.log);
 
 ### Agent Guidelines
 
-1. Read RPC from `assets/networks.json` → `atlantic.rpcUrl`
+1. Read RPC from `assets/networks.json` -> `atlantic.rpcUrl`
 2. Prefer `assets/templates/template_read.js.tpl` when generating files
 3. Use ethers `Contract` with minimal ABI fragment
 4. Log parsed return values

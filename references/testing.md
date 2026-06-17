@@ -2,8 +2,8 @@
 
 Pharos TrustMesh has two verification layers:
 
-1. **Foundry unit tests** — `DAGRegistry.sol` lifecycle, access control, and revert strings
-2. **Integration verification** — `verify-execution` compares on-chain state to demo workflow artifacts
+1. **Foundry unit tests**  -  `DAGRegistry.sol` lifecycle, access control, and revert strings
+2. **Integration verification**  -  `verify-execution` compares on-chain state to demo workflow artifacts
 
 ---
 
@@ -46,7 +46,7 @@ forge test --match-test finalize   # filter by name
 | `publishCanonicalDag` | Name storage, duplicate publish revert |
 | View helpers | `approvalCount`, `getApprovers`, `requiredApprovals` |
 
-The test harness deploys `DAGRegistry(2)` — two independent verifier approvals are required before `finalizeExecution`.
+The test harness deploys `DAGRegistry(2)`  -  two independent verifier approvals are required before `finalizeExecution`.
 
 ### Revert strings under test
 
@@ -73,7 +73,7 @@ These strings must stay in sync with `references/dag-executor.md` error tables:
 
 ## Workflow integration tests
 
-These are not npm/Jest tests. They exercise the full off-chain → on-chain pipeline and assert consistency afterward.
+These are not npm/Jest tests. They exercise the full off-chain -> on-chain pipeline and assert consistency afterward.
 
 ### Local demo (no keys)
 
@@ -106,7 +106,19 @@ npm run verify-execution demo-sali-atlantic.json
 - `completed` / `resultHash` match expected final state
 - Exit code `0` on PASS
 
-See [`dag-executor.md#verify-execution`](dag-executor.md#verify-execution) for artifact naming.
+See [`dag-executor.md#verify-execution`](dag-executor.md#verify-execution) for artifact naming. Trust assumptions: [`trust-model.md`](trust-model.md).
+
+---
+
+## GitHub Actions CI
+
+The repository includes [`.github/workflows/ci.yml`](../.github/workflows/ci.yml), which runs on every push and pull request:
+
+1. `npm ci`
+2. `forge build && forge test`
+3. `npm run demo:local && npm run verify-execution demo-workflow-payment-local.json`
+
+Badge in README links to the workflow run history.
 
 ---
 
@@ -127,3 +139,12 @@ npm run verify-execution demo-sali-atlantic.json
 ```
 
 Captured demo transcript: `demo-output.txt`.
+
+### MCP smoke tests
+
+```bash
+node scripts/smoke-test-mcp.js          # tool logic
+node scripts/smoke-test-mcp-stdio.js    # stdio protocol + list_workflows + fetch_pyth_price
+```
+
+See [`mcp/README.md`](../mcp/README.md) for setup and troubleshooting.

@@ -2,7 +2,7 @@
 
 > **Environment (set once before any command in this file):**
 > ```bash
-> export RPC=https://atlantic.dplabs-internal.com    # from assets/networks.json → atlantic.rpcUrl
+> export RPC=https://atlantic.dplabs-internal.com    # from assets/networks.json -> atlantic.rpcUrl
 > export PRIVATE_KEY=0x...                           # your executor wallet key
 > export EXPLORER=https://atlantic.pharosscan.xyz
 > ```

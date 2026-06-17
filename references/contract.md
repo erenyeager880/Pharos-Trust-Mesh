@@ -32,7 +32,7 @@ forge script script/<Script>.s.sol:<Script> \
 
 | Field | Description |
 |-------|-------------|
-| `Registry address:` / logged address | Deployed contract — save for future calls |
+| `Registry address:` / logged address | Deployed contract  -  save for future calls |
 
 ### Error Handling
 
@@ -77,7 +77,7 @@ forge verify-contract <address> src/<path>:<Contract> \
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `contract not found` | Indexer delay | Wait 10–15s and retry |
+| `contract not found` | Indexer delay | Wait 10-15s and retry |
 
 > **Agent Guidelines:**
 > 1. Wait `sleep 10` after deploy

@@ -1,6 +1,6 @@
 # Query Operation Instructions
 
-> Network Configuration: `<rpc>` is read from `assets/networks.json` → Atlantic `rpcUrl`.
+> Network Configuration: `<rpc>` is read from `assets/networks.json` -> Atlantic `rpcUrl`.
 > Private Key: Not required for read-only queries.
 
 ---
@@ -22,7 +22,7 @@ cast balance <address> --rpc-url <rpc> --ether
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `<address>` | string | Yes | Wallet address (`0x` + 40 hex chars) |
-| `<rpc>` | string | Yes | From `assets/networks.json` → `atlantic.rpcUrl` |
+| `<rpc>` | string | Yes | From `assets/networks.json` -> `atlantic.rpcUrl` |
 
 ### Output Parsing
 
